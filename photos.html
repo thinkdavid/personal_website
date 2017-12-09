@@ -6,8 +6,9 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="assets/js/html5shiv.js"></script><![endif]-->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="assets/css/lightbox.min.css" />
 		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
 		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
@@ -23,16 +24,27 @@
 						<header>
 							<h1>Photos</h1>
 						</header>
-					<section class="container">
+					<section class="container-fluid">
 						<div class="row">
-							<div class="col">
-								<img src="images/1.jpg" class="img-fluid thumb" alt="Responsive image"> </img>
+							<div class="col-sm">
+								<a href="images/1.jpg" data-lightbox="catalog" data-title="Telico Plains, TN"><img src="images/1.jpg" class="img-fluid thumb" alt="Responsive image"> </img> </a>
 							</div>
-							<div class="col">
-								<img src="images/2.jpg" class="img-fluid thumb" alt="Responsive image"> </img>
+							<div class="col-sm">
+								<a href="images/2.jpg" data-lightbox="catalog" data-title="Lake Eola x Orlando, FL"><img src="images/2.jpg" class="img-fluid thumb" alt="Responsive image"> </img> </a>
 							</div>
-							<div class="col">
-								<img src="images/3.jpg" class="img-fluid thumb" alt="Responsive image"> </img>
+							<div class="col-sm">
+								<a href="images/3.jpg" data-lightbox="catalog" data-title="Telico Plains, TN"><img src="images/3.jpg" class="img-fluid thumb" alt="Responsive image"> </img> </a>
+							</div>
+						</div>	
+						<div class="row">
+							<div class="col-sm">
+								<a href="images/4.jpg" data-lightbox="catalog" data-title="Royal Museum of Art x Toronto, Canada."><img src="images/4.jpg" class="img-fluid thumb" alt="Responsive image"> </img> </a>
+							</div>
+							<div class="col-sm">
+								<a href="images/5.jpg" data-lightbox="catalog" data-title="University of Toronto x Toronto, Canada."><img src="images/5.jpg" class="img-fluid thumb" alt="Responsive image"> </img> </a>
+							</div>
+							<div class="col-sm">
+								<a href="images/6.jpg" data-lightbox="catalog" data-title="Traffic in Toronto, Canada."><img src="images/6.jpg" class="img-fluid thumb" alt="Responsive image"> </img> </a>
 							</div>
 						</div>
 					</section>
@@ -66,7 +78,7 @@
 				}
 			</script>
 			<script type="text/javascript" src="assets/js/jquery-3.2.1.js"></script>
-			<script type="text/javascript" src="assets/js/main.js"></script>
+			<script type="text/javascript" src="assets/js/lightbox.min.js"></script>
 
 	</body>
 </html>
