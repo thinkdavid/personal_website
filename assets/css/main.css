@@ -707,8 +707,8 @@
 
 	#welcome, #photos, #writing, #main {
 		position: relative;
-		min-width: 27em;
-		max-width: :100%;
+		min-width: 57em;
+		max-width: :57em;
 		padding: 4.5em 3em 3em 3em ;
 		background: #ffffff;
 		border-radius: 4px;
@@ -729,45 +729,27 @@
 		transition: opacity 1s ease, transform 1s ease;
 	}
 
-	#writing {
-		max-width: 95%;
-	}
+		#writing {
+			max-width: 53em;
+		}
 
-	.article-title {
-		color: #88a0af;
-		font-weight: bold;
-	}
+		.article-title {
+			color: #88a0af;
+			font-weight: bold;
+		}
 
-	.piece {
-		padding: 1em;
-	}
+		.piece {
+			padding: 1em;
+		}
 
-	 /*#main {
-	 	position: relative;
-		max-width: 100%;
-		min-width: 80%;
-		padding: 2.5em 3em 3em 3em ;
-		background: #ffffff;
-		border-radius: 4px;
-		cursor: default;
-		opacity: 0.95;
-		text-align: center;
-		-moz-transform-origin: 50% 50%;
-		-webkit-transform-origin: 50% 50%;
-		-ms-transform-origin: 50% 50%;
-		transform-origin: 50% 50%;
-		-moz-transform: rotateX(0deg);
-		-webkit-transform: rotateX(0deg);
-		-ms-transform: rotateX(0deg);
-		transform: rotateX(0deg);
-		-moz-transition: opacity 1s ease, -moz-transform 1s ease;
-		-webkit-transition: opacity 1s ease, -webkit-transform 1s ease;
-		-ms-transition: opacity 1s ease, -ms-transform 1s ease;
-		transition: opacity 1s ease, transform 1s ease;
-	}*/
+	 
 
 	.hidden {
 		display: none;
+	}
+
+	#welcome {
+		min-width: 27em;
 	}
 
 		#welcome .avatar {

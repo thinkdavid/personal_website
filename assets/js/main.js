@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	$('#main').add
+
 });
 
 $("#getStartedBtn").click(function() {
@@ -12,14 +12,18 @@ $("#getStartedBtn").click(function() {
 	});
 });
 
-
 // angular data controllers
-
 // Define the `essay` module
 var writingApp = angular.module('writingApp', ['ngSanitize']);
 
 // Define the `PhoneListController` controller on the `phonecatApp` module
 writingApp.controller('EssayListController', function EssayListController($scope) {
+
+  $scope.header = 'Writing';
+
+  // starting article number
+  $scope.articleNum = 0;
+
   $scope.essays = [
     {
       date: 'November 21, 2017',
@@ -31,16 +35,44 @@ writingApp.controller('EssayListController', function EssayListController($scope
       title: 'This is a test article',
       body: 'This is a test body of article'
     },
+    {
+      date: 'January 9, 2018',
+      title: 'This is the third article',
+      body: 'This is a test body of article'
+    },
   ];
 
+  $scope.articleChange = function() {
+	if ($scope.articleNum <= 0) {
+		$('#next').show();
+	  	$('#prev').hide();
+	  } 
+	else if ($scope.articleNum >= $scope.essays.length-1) {
+		$('#next').hide();
+		$('#prev').show();
+	} else {
+	  	$('#next').show();
+	  	$('#prev').show();
+	}
+}
+
   $scope.nextEssay = function() {
-  	console.log('next essay');
+  	if ($scope.articleNum < $scope.essays.length-1) {
+		$scope.articleNum += 1;
+	  	// console.log($scope.articleNum);
+  	}
+  	$scope.articleChange();
   };
 
   $scope.prevEssay = function() {
-  	console.log('prev essay');
+  	if ($scope.articleNum > 0) {
+		$scope.articleNum -= 1;
+	  	// console.log($scope.articleNum);
+  	}
+  	$scope.articleChange();
   }; 
 
- $scope.header = 'Writing';
+  //initial population
+  $scope.articleChange();
 
 });
