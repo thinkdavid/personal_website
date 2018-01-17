@@ -1,0 +1,23 @@
+{
+  "name": "personalwebsite",
+  "version": "1.0.0",
+  "description": "A personal website I made using a template from HTML5up.net, foundation, and jquery -- just to teach myself the basics of web design and web development.",
+  "main": "assets/main.js",
+  "dependencies": {
+    "angular-route": "^1.6.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thinkdavid/personal_website.git"
+  },
+  "author": "thinkdavid",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thinkdavid/personal_website/issues"
+  },
+  "homepage": "https://github.com/thinkdavid/personal_website#readme"
+}

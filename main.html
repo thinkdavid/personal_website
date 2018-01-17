@@ -1,0 +1,68 @@
+<!-- Main Welcome -->
+<section id="welcome">
+	<header>
+		<span class="avatar"><img src="images/avatar.jpg" alt="" /></span>
+		<h1>David Becher</h1>
+		<p>Richmond, VA </p>
+	</header>
+
+<script>	
+$("#getStartedBtn").click(function() {
+	$(this).fadeOut("slow", function() {
+		$('#welcome').slideUp(function () {
+			$('#main').slideDown(function () {
+				$('main').toggleClass('.hidden');
+			}); 
+		});;
+	});
+}); </script>
+
+	<hr />
+		<ul class="actions">
+			<li><a href="#" class="button" id="getStartedBtn">Let's go.</a></li>
+		</ul>
+	</form>
+	<hr />
+	
+	<footer>
+		<ul class="icons">
+			<li><a href="https://twitter.com/thinkdavid_xD" target="_blank" class="fa-twitter">Twitter</a></li>
+			<li><a href="https://instagram.com/thinkdavid" target="_blank" class="fa-instagram">Instagram</a></li>
+			<li><a href="https://facebook.com/t1t2td" target="_blank" class="fa-facebook">Facebook</a></li>
+		</ul>
+	</footer>
+</section>
+
+<section id="main" class="hidden">
+	<header>
+		<h1>David Becher</h1>
+		<p>Welcome</p>
+	</header>
+<section class="container">
+	<div class="row">
+		<div class="col">
+			<img src="images/4.jpg" class="img-fluid" alt="Responsive image"> </img>
+		</div>
+		<div class="col">
+			<img src="images/5.jpg" class="img-fluid" alt="Responsive image"> </img>
+		</div>
+		<div class="col">
+			<img src="images/3.jpg" class="img-fluid" alt="Responsive image"> </img>
+		</div>
+	</div>
+</section>
+	<hr />
+		<p> Richmond, VA <br>
+			Just trying to get good at everything.. <br>
+		</p>
+
+	<hr />
+<footer class="container links">
+	<div class="row">
+		<a class="col text-center" href="#/" ng-click="selectMainPage()">Home</a>
+		<a class="col text-center" href="#/photos" ng-click="selectPhotoPage()">Photos</a>
+		<a class="col text-center" href="#/music" ng-click="selectMusicPage()">Music </a>
+		<a class="col text-center" href="#/writing" ng-click="selectWritingPage()">Writing </a>
+	</div>
+</footer>
+</section>

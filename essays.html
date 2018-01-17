@@ -1,80 +1,44 @@
-<!DOCTYPE HTML>
-<html ng-app="writingApp">
-	<head>
-		<link rel="icon" href="images/icon_medium.png">
-		<title>thinkdavid</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-loading">
-			<div id="wrapper">
-					<section id="writing" ng-controller="EssayListController">
-						<header>
-							<h1>{{header}}</h1>
-							<hr>
-						</header>
-					<section class="container-fluid">
-						<div class="row justify-content-center">
-							<div class="col-12 figure"> 
-								<article class="border border-info piece" ng-repeat="essay in essays | limitTo:1:articleNum">
-									<p>	{{essay.date}}
-										<h2 class="article-title">{{essay.title}}</h2><br> 
-										<span ng-bind-html="essay.body"> 
-										{{essay.body}} </span>
-									</p>
-								</article> 
-								<div class="row justify-content-center">
-								  <ul class="pagination">
-								    <li class="page-item" id='prev'>
-								      <a ng-click="prevEssay()" total-items="essays.length" class="page-link" items-per-page=1 aria-label="Previous">
-								        <span aria-hidden="true">&laquo;</span>
-								        <span class="sr-only">Previous</span>
-								      </a>
-								    </li>
-								    <li class="page-item" id='next'>
-								      <a ng-click="nextEssay()" total-items="essays.length" class="page-link" items-per-page=1 aria-label="Next">
-								        <span aria-hidden="true">&raquo;</span>
-								        <span class="sr-only">Next</span>
-								      </a>
-								    </li>
-								  </ul>
-								</div>
-							</div>
-						</div>
-					</section>
-						<hr />
-						<footer class="container links">
-							<div class="row">
-								<a class="col text-center" href="index.html">Home</a>
-								<a class="col text-center" href="photos.html">Photos</a>
-								<a class="col text-center" href="music.html">Music </a>
-								<a class="col text-center" href="essays.html">Writing </a>
-								<a class="col text-center" href="misc.html">Misc. </a>
-							</div>
-						</footer>
-					</section>
-					<footer id="footer">
-						<ul class="copyright">
-							<li>&copy; thinkdavid</li><li><a href="http://twitter.com/thinkdavid_xD">Twitter</a></li><li><a href="http://instagram.com/thinkdavid">IG</a></li>
-						</ul>
-					</footer>
-				</section>
+<section id="writing">
+	<header>
+		<h1>{{header}}</h1>
+		<hr>
+	</header>
+<section class="container-fluid">
+	<div class="row justify-content-center">
+		<div class="col-12 figure"> 
+			<article class="border border-info piece" ng-repeat="essay in essays | limitTo:1:articleNum">
+				<p>	{{essay.date}}
+					<h2 class="article-title">{{essay.title}}</h2><br> 
+					<span ng-bind-html="essay.body"> 
+					{{essay.body}} </span>
+				</p>
+			</article> 
+			<div class="row justify-content-center">
+			  <ul class="pagination">
+			    <li class="page-item" id='prev'>
+			      <a ng-click="prevEssay()" total-items="essays.length" class="page-link" items-per-page=1 aria-label="Previous">
+			        <span aria-hidden="true">&laquo;</span>
+			        <span class="sr-only">Previous</span>
+			      </a>
+			    </li>
+			    <li class="page-item" id='next'>
+			      <a ng-click="nextEssay()" total-items="essays.length" class="page-link" items-per-page=1 aria-label="Next">
+			        <span aria-hidden="true">&raquo;</span>
+			        <span class="sr-only">Next</span>
+			      </a>
+			    </li>
+			  </ul>
 			</div>
-
-			<script>
-				if ('addEventListener' in window) {
-					window.addEventListener('load', function() { document.body.className = document.body.className.replace(/\bis-loading\b/, ''); });
-					document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
-				}
-			</script>
-			<script type="text/javascript" src="assets/js/jquery-3.2.1.js"></script>
-			<script type="text/javascript" src="assets/js/angular.min.js"></script>
-			<script type="text/javascript" src="assets/js/angular-sanitize.js"></script>
-			<script type="text/javascript" src="assets/js/main.js"></script>
-
-	</body>
-</html>
+		</div>
+	</div>
+</section>
+	<hr />
+	<footer class="container links">
+	<div class="row">
+		<a class="col text-center" href="#/" ng-click="selectMainPage()">Home</a>
+		<a class="col text-center" href="#/photos" ng-click="selectPhotoPage()">Photos</a>
+		<a class="col text-center" href="#/music" ng-click="selectMusicPage()">Music </a>
+		<a class="col text-center" href="#/writing" ng-click="selectWritingPage()">Writing </a>
+	</div>
+	</footer>
+</section>

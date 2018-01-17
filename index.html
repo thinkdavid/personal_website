@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html ng-app="mainApp">
 	<head>
 		<link rel="icon" href="images/icon_medium.png">
 		<title>thinkdavid</title>
@@ -8,77 +8,23 @@
 		<!--[if lte IE 8]><script src="assets/js/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="assets/css/lightbox.min.css" />
 		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
 		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
 	<body class="is-loading">
 		<!-- Wrapper -->
-			<div id="wrapper">
-				<!-- Main Welcome -->
-					<section id="welcome">
-						<header>
-							<span class="avatar"><img src="images/avatar.jpg" alt="" /></span>
-							<h1>David Becher</h1>
-							<p>Renaissance Man</p>
-						</header>
-						
-						<hr />
-							<ul class="actions">
-								<li><a href="#" class="button" id="getStartedBtn">Get Started</a></li>
-							</ul>
-						</form>
-						<hr />
-						
-						<footer>
-							<ul class="icons">
-								<li><a href="https://twitter.com/thinkdavid_xD" target="_blank" class="fa-twitter">Twitter</a></li>
-								<li><a href="https://instagram.com/thinkdavid" target="_blank" class="fa-instagram">Instagram</a></li>
-								<li><a href="https://facebook.com/t1t2td" target="_blank" class="fa-facebook">Facebook</a></li>
-							</ul>
-						</footer>
-					</section>
+			<div id="wrapper" class="container">
 
-					<section id="main" class="hidden">
-						<header>
-							<h1>David Becher</h1>
-							<p>Welcome</p>
-						</header>
-					<section class="container">
-						<div class="row">
-							<div class="col">
-								<img src="images/4.jpg" class="img-fluid" alt="Responsive image"> </img>
-							</div>
-							<div class="col">
-								<img src="images/5.jpg" class="img-fluid" alt="Responsive image"> </img>
-							</div>
-							<div class="col">
-								<img src="images/3.jpg" class="img-fluid" alt="Responsive image"> </img>
-							</div>
-						</div>
-					</section>
-						<hr />
-							<p> Richmond, VA <br>
-								Just trying to get good at everything.. <br>
-							</p>
+				<div ng-view></div>
+				<footer id="footer">
+					<ul class="copyright">
+						<li>&copy; thinkdavid</li><li><a href="http://twitter.com/thinkdavid_xD">Twitter</a></li><li><a href="http://instagram.com/thinkdavid">IG</a></li>
+					</ul>
+				</footer>
 
-						<hr />
-						<footer class="container links">
-							<div class="row">
-								<a class="col text-center" href="index.html">Home</a>
-								<a class="col text-center" href="photos.html">Photos</a>
-								<a class="col text-center" href="music.html">Music </a>
-								<a class="col text-center" href="essays.html">Writing </a>
-								<a class="col text-center" href="misc.html">Misc. </a>
-							</div>
-						</footer>
-					</section>
-				<!-- Footer -->
-					<footer id="footer">
-						<ul class="copyright">
-							<li>&copy; thinkdavid</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-						</ul>
-					</footer>
+				</footer>
 
 			</div>
 
@@ -90,8 +36,14 @@
 					document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
 				}
 			</script>
+			
 			<script type="text/javascript" src="assets/js/jquery-3.2.1.js"></script>
+			<script type="text/javascript" src="assets/js/angular.min.js"></script>
 			<script type="text/javascript" src="assets/js/main.js"></script>
+			<script type="text/javascript" src="assets/js/lightbox.min.js"> </script>
 
+			<!-- angular dependencies -->
+			<script type="text/javascript" src="node_modules/angular-sanitize/angular-sanitize.min.js"></script>
+			<script type="text/javascript" src="node_modules/angular-route/angular-route.min.js"></script>
 	</body>
 </html>
