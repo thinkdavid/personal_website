@@ -35,6 +35,11 @@ mainApp.config(['$locationProvider', function($locationProvider) {
 }]);
 
 mainApp.controller('MainController', function MainController($location, $scope) {
+
+  $scope.selectNewPage = function() {
+    console.log("new page");
+    window.scrollTo(0, 0);
+  };
   //***//
 });
 
@@ -72,9 +77,10 @@ mainApp.controller('EssayListController', function EssayListController($scope, $
 	  	$('#next').show();
 	  	$('#prev').show();
 	}
-}
+};
 
   $scope.nextEssay = function() {
+    window.scrollTo(0, 0);
   	if ($scope.articleNum < $scope.essays.length-1) {
 		$scope.articleNum += 1;
 	  	// console.log($scope.articleNum);
@@ -83,6 +89,7 @@ mainApp.controller('EssayListController', function EssayListController($scope, $
   };
 
   $scope.prevEssay = function() {
+    window.scrollTo(0, 0);
   	if ($scope.articleNum > 0) {
 		$scope.articleNum -= 1;
 	  	// console.log($scope.articleNum);
@@ -96,11 +103,17 @@ mainApp.controller('EssayListController', function EssayListController($scope, $
 });
 
 mainApp.controller('MusicController', function MusicController($scope, $location) {
-
+  $scope.selectNewPage = function() {
+    console.log("new page");
+    window.scrollTo(0, 0);
+  };
 });
 
 mainApp.controller('PhotoController', function PhotoController($scope, $location) {
-
+  $scope.selectNewPage = function() {
+    console.log("new page");
+    window.scrollTo(0, 0);
+  };
 });
 
 
