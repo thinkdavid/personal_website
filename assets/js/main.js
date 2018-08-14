@@ -25,6 +25,10 @@ mainApp.config(function($routeProvider) {
       controller:'MusicController',
       templateUrl:'music.html'
     })
+    .when('/travel', {
+      controller:'TravelController',
+      templateUrl:'travel.html'
+    })
     .otherwise({
       redirectTo:'/'
     });
@@ -115,6 +119,13 @@ mainApp.controller('MusicController', function MusicController($scope, $location
 });
 
 mainApp.controller('PhotoController', function PhotoController($scope, $location) {
+  $scope.selectNewPage = function() {
+    console.log("new page");
+    window.scrollTo(0, 0);
+  };
+});
+
+mainApp.controller('TravelController', function TravelController($scope, $location) {
   $scope.selectNewPage = function() {
     console.log("new page");
     window.scrollTo(0, 0);

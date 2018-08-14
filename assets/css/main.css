@@ -705,7 +705,7 @@
 
 /* Main */
 
-	#welcome, #photos, #writing, #main {
+	#welcome, #photos, #writing, #main, #travel {
 		position: relative;
 		min-width: 57em;
 		max-width: :57em;
@@ -731,6 +731,10 @@
 
 		#writing {
 			max-width: 53em;
+		}
+
+		#travel {
+			font-family: Tahoma
 		}
 
 		.article-title {
