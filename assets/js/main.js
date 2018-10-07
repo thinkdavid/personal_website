@@ -57,6 +57,11 @@ mainApp.controller('EssayListController', function EssayListController($scope, $
 
   $scope.essays = [
     {
+      date: 'October 3, 2018',
+      title: 'It\'s gonna be alright *Kendrick Voice*',
+      body: 'Never get too high, never stay too low. <br><br> After relatively breezing through life for years (shout out to my family and friends)\, "real life" hit me hard. I\'ve never been lacking for confidence, and that confidence has let me handle adverse situations relatively smoothly. <br><br> Example: <br> If rejected by a girl that I liked, it had nothing wrong with me (nor her), we just were not compatible <br> If there was anything I wasn\'t particularly good at, it wasn\'t because I couldn\'t, it was just because I hadn\'t had a chance to practice yet. <br><br> So when real life hit (to me, graduated college), and I started dealing with thoughts like <em>"what am I supposed to do now,"</em> and <em>"shit, I\'m really out here doing this adult shit, I guess."</em> And stuff like that leads to other mental health issues, that I also never had to consider. <br><br> The real world was scary. <br> But it\'s not. <br><br> At least not as much as I thought. It\'s definitely not as complicated. I don\'t need the answer to every question. I\'m not the only one feeling like this. Just continue doing right by other people and shit\'s gonna be okay. And it has. <br><br>'
+    }
+    ,{
       date: 'April 17, 2018',
       title: 'Transition',
       body: 'Transitions are weird. <br><br> It implies that there\’s some sort of gradual period in between two stages. Some time for you to prepare for what\’s coming. But that\’s not really how it works. <br><br> A big bang happens, and then next thing you know, you\’re in a whole new universe. <br><br> But the fossils of the old stage remain no matter how hard you try to bury them. <br><br> I mean, we know that dinosaurs exist, and they got hit by a fucking meteor. Even though it feels like, so did I. <br><br> But dinosaurs…  They got hit by a fucking meteor. <br><br> I just got hit by a transition. <br><br> A transition I wasn\’t prepared for.'

@@ -733,17 +733,16 @@
 			max-width: 53em;
 		}
 
-		#travel {
-			font-family: Tahoma
-		}
-
 		.article-title {
 			color: #88a0af;
 			font-weight: bold;
+			text-align: center;
 		}
 
 		.piece {
 			padding: 1em;
+			text-transform: none;
+			text-align: left;
 		}
 
 
