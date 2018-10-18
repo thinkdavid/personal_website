@@ -2,6 +2,12 @@ $(document).ready(function() {
   console.log("page loaded");
 });
 
+$(".card").click(function() {
+  window.location = $(this).find("a").attr("href"); 
+  console.log("card clicked");
+  return false;
+});
+
 /***** Angular *****/
 
 // Define the main module
