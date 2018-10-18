@@ -8,6 +8,7 @@ $(document).ready(function() {
 var mainApp = angular.module('mainApp', ['ngSanitize', 'ngRoute']);
 
 mainApp.config(function($routeProvider) {
+  console.log($routeProvider)
   $routeProvider
     .when('/', {
       controller:'MainController',
@@ -28,6 +29,10 @@ mainApp.config(function($routeProvider) {
     .when('/travel', {
       controller:'TravelController',
       templateUrl:'travel.html'
+    })
+    .when('/thailand', {
+      controller:'TravelController',
+      templateUrl:'thailand.html'
     })
     .otherwise({
       redirectTo:'/'
@@ -135,6 +140,8 @@ mainApp.controller('TravelController', function TravelController($scope, $locati
     console.log("new page");
     window.scrollTo(0, 0);
   };
+
+
 });
 
 

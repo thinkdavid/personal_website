@@ -705,7 +705,7 @@
 
 /* Main */
 
-	#welcome, #photos, #writing, #main, #travel {
+	#welcome, #photos, #writing, #main, #travel, #travel-post {
 		position: relative;
 		min-width: 57em;
 		max-width: :57em;
@@ -744,6 +744,27 @@
 			text-transform: none;
 			text-align: left;
 		}
+
+		#travel-post .travel-header, .back-header {
+			text-align: center;
+		}
+
+		#travel-post .travel-body {
+			text-align: left;
+			text-transform: none;
+			color: black;
+		}
+
+		#travel .card-title {
+			color: #f8f9fa;
+			font-weight: bold;
+		}
+
+		#travel .card-img {
+			filter: blur(1px);
+		}
+
+
 
 
 	.hidden {
