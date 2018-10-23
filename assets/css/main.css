@@ -753,6 +753,7 @@
 			text-align: left;
 			text-transform: none;
 			color: black;
+			font-family: sans-serif;
 		}
 
 		#travel .card-title {
@@ -761,11 +762,13 @@
 		}
 
 		#travel .card-img {
-			filter: blur(1px);
+			filter: blur(2px);
 		}
 
 
-
+		#travel-post h3 {
+			font-weight: bold;
+		}
 
 	.hidden {
 		display: none;

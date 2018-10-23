@@ -40,6 +40,10 @@ mainApp.config(function($routeProvider) {
       controller:'TravelController',
       templateUrl:'thailand.html'
     })
+    .when('/peru', {
+      controller:'TravelController',
+      templateUrl:'peru.html'
+    })
     .otherwise({
       redirectTo:'/'
     });
