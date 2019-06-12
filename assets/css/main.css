@@ -705,7 +705,7 @@
 
 /* Main */
 
-	#welcome, #photos, #writing, #main, #travel, #travel-post {
+	#welcome, #photos, #writing, #main, #travel, #about, #travel-post {
 		position: relative;
 		min-width: 40em;
 		padding: 4.5em 3em 3em 3em ;
@@ -800,7 +800,7 @@
 
 		@media screen and (max-width: 480px) {
 
-			#welcome, #main, #photos, #writing, #travel, #travel-post {
+			#welcome, #main, #about, #photos, #writing, #travel, #travel-post {
 				min-width: 0;
 				width: 100%;
 				padding: 4em 2em 2.5em 2em ;

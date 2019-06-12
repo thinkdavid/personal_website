@@ -16,11 +16,12 @@ $('.lazy').Lazy({
         onError: function(element) {
             console.log('error loading ' + element.data('src'));
         }
-    });
+});
 
 $(function() {
         $('.lazy').lazy();
-    });
+});
+
 
 /***** Angular *****/
 
@@ -33,6 +34,10 @@ mainApp.config(function($routeProvider) {
     .when('/', {
       controller:'MainController',
       templateUrl:'main.html'
+    })
+    .when('/about', {
+      controller:'MusicController',
+      templateUrl:'about.html'
     })
     .when('/writing', {
       controller:'EssayListController',
@@ -164,8 +169,6 @@ mainApp.controller('TravelController', function TravelController($scope, $locati
     console.log("new page");
     window.scrollTo(0, 0);
   };
-
-
 });
 
 
