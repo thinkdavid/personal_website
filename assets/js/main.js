@@ -36,7 +36,7 @@ mainApp.config(function($routeProvider) {
       templateUrl:'main.html'
     })
     .when('/about', {
-      controller:'MusicController',
+      controller:'MainController',
       templateUrl:'about.html'
     })
     .when('/writing', {
@@ -63,6 +63,10 @@ mainApp.config(function($routeProvider) {
       controller:'TravelController',
       templateUrl:'peru.html'
     })
+    .when('/colombia', {
+      controller:'TravelController',
+      templateUrl:'colombia.html'
+    })
     .otherwise({
       redirectTo:'/'
     });
@@ -75,7 +79,7 @@ mainApp.config(['$locationProvider', function($locationProvider) {
 mainApp.controller('MainController', function MainController($location, $scope) {
 
   $scope.selectNewPage = function() {
-    console.log("new page");
+    // console.log("new page");
     window.scrollTo(0, 0);
   };
   //***//
@@ -152,23 +156,28 @@ mainApp.controller('EssayListController', function EssayListController($scope, $
 
 mainApp.controller('MusicController', function MusicController($scope, $location) {
   $scope.selectNewPage = function() {
-    console.log("new page");
+    // console.log("new page");
     window.scrollTo(0, 0);
   };
 });
 
 mainApp.controller('PhotoController', function PhotoController($scope, $location) {
   $scope.selectNewPage = function() {
-    console.log("new page");
+    // console.log("new page");
     window.scrollTo(0, 0);
   };
 });
 
 mainApp.controller('TravelController', function TravelController($scope, $location) {
   $scope.selectNewPage = function() {
-    console.log("new page");
+    // console.log("new page");
     window.scrollTo(0, 0);
   };
+
+  $scope.selectedTravelPost = function() {
+    window.scrollTo(0, 0);
+  };
+  
 });
 
 
