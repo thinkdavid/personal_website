@@ -67,6 +67,10 @@ mainApp.config(function($routeProvider) {
       controller:'TravelController',
       templateUrl:'colombia.html'
     })
+    .when('/store', {
+      controller:'StoreController',
+      templateUrl:'store.html'
+    })
     .otherwise({
       redirectTo:'/'
     });
@@ -178,6 +182,15 @@ mainApp.controller('TravelController', function TravelController($scope, $locati
     window.scrollTo(0, 0);
   };
   
+});
+
+mainApp.controller('StoreController', function StoreController($location, $scope) {
+
+  $scope.selectNewPage = function() {
+    // console.log("new page");
+    window.scrollTo(0, 0);
+  };
+  //***//
 });
 
 

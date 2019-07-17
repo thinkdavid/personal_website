@@ -705,7 +705,7 @@
 
 /* Main */
 
-	#welcome, #photos, #writing, #main, #travel, #about, #travel-post {
+	#welcome, #photos, #writing, #main, #travel, #about, #store, #travel-post {
 		position: relative;
 		min-width: 40em;
 		padding: 4.5em 3em 3em 3em ;
@@ -727,11 +727,31 @@
 		-ms-transition: opacity 1s ease, -ms-transform 1s ease;
 		transition: opacity 1s ease, transform 1s ease;
 	}
+		.about-text {
+			text-align: left;
+		}
+
+		a.about-links {
+			color: #e64353;
+		}
 
 		.article-title {
 			color: #88a0af;
 			font-weight: bold;
 			text-align: center;
+		}
+
+		.store-title {
+			text-align: center;
+			font-style: italic;
+			font-size: .8em;
+			text-transform: none;
+		}
+
+		.store-price {
+			text-align: center;
+			text-transform: none;
+			font-size: .75em;
 		}
 
 		.piece {
@@ -800,7 +820,7 @@
 
 		@media screen and (max-width: 480px) {
 
-			#welcome, #main, #about, #photos, #writing, #travel, #travel-post {
+			#welcome, #main, #about, #photos, #store, #writing, #travel, #travel-post {
 				min-width: 0;
 				width: 100%;
 				padding: 4em 2em 2.5em 2em ;
