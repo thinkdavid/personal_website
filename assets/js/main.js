@@ -71,6 +71,10 @@ mainApp.config(function($routeProvider) {
       controller:'StoreController',
       templateUrl:'store.html'
     })
+    .when('/store/halong_bay', {
+      controller: 'StoreController',
+      templateUrl: 'store_items/halong_bay.html'
+    })
     .otherwise({
       redirectTo:'/'
     });
@@ -81,6 +85,16 @@ mainApp.config(['$locationProvider', function($locationProvider) {
 }]);
 
 mainApp.controller('MainController', function MainController($location, $scope) {
+
+  $scope.selectNewPage = function() {
+    // console.log("new page");
+    window.scrollTo(0, 0);
+  };
+  //***//
+});
+
+// Define the StoreController
+mainApp.controller('StoreController', function StoreController($location, $scope) {
 
   $scope.selectNewPage = function() {
     // console.log("new page");
@@ -184,14 +198,6 @@ mainApp.controller('TravelController', function TravelController($scope, $locati
   
 });
 
-mainApp.controller('StoreController', function StoreController($location, $scope) {
-
-  $scope.selectNewPage = function() {
-    // console.log("new page");
-    window.scrollTo(0, 0);
-  };
-  //***//
-});
 
 
 
