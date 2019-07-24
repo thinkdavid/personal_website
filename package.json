@@ -4,7 +4,7 @@
   "description": "A personal website I made using a template from HTML5up.net, foundation, and jquery -- just to teach myself the basics of web design and web development.",
   "main": "assets/main.js",
   "dependencies": {
-    "angular-route": "^1.6.8"
+    "angular-route": "^1.7.8"
   },
   "devDependencies": {},
   "scripts": {

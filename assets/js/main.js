@@ -26,7 +26,7 @@ $(function() {
 /***** Angular *****/
 
 // Define the main module
-var mainApp = angular.module('mainApp', ['ngSanitize', 'ngRoute']);
+var mainApp = angular.module('mainApp', ['ngRoute']);
 
 mainApp.config(function($routeProvider) {
   console.log($routeProvider)

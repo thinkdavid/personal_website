@@ -1,0 +1,100 @@
+<section id="store">
+	<header>
+		<h1 ng-model="$ctrl.store-item">Halong Bay</h1>
+		<h6>Vietnam</h6>
+
+	</header>
+
+	<section class="container-fluid" id="store-item">
+		<div class="row">
+			
+			<div class="col-md">
+				<div class="thumbnail"> <img src="images/11.jpg" class="lazy img-fluid thumb" alt="Responsive image"> </img> </div>
+			</div>
+
+
+			<div class="col-md">
+				<div class="row">
+					<div class="store-item-description"> <p> 
+						taken in 2017 on the indochina junk cruise to Bai Tu Long Bay. <br> <br> 
+						shot on nikon d3400, nikkor 35mm f/1.8 <br> 
+						1/200 | f/7  </p> </div>
+				</div>
+				<div class="row">
+					<div class="store-item-price"> 
+						<select id="store-item-size" ng-model="$ctrl.price">
+				          <option value="canvas"> 3 x 12"x24" Canvas - $199.99</option>
+				          <option value="print"> 16" x 9" Framed Print - $49.99 </option>
+				          <option value="small-print"> 9.6" x 5.4" Small Print - $24.99 </option>
+				        </select>
+        	 		</div> 
+				</div>
+				<div class="row">
+					<!-- Load Stripe.js on your website. -->
+					<script src="https://js.stripe.com/v3"></script>
+
+					<!-- Create a button that your customers click to complete their purchase. Customize the styling to suit your branding. -->
+					<button
+					  style="background-color:#6772E5;color:#FFF;padding:8px 12px;border:0;border-radius:4px;font-size:1em"
+					  id="checkout-button"
+					  role="link"
+					>
+					  Checkout
+					</button>
+
+					<div id="error-message"></div>
+
+					<script>
+					  var stripe = Stripe('pk_test_26bcR5e12gCkdCMYQGGdrvk900VgNdf6AQ');
+
+					  var checkoutButton = document.getElementById('checkout-button');
+
+					  checkoutButton.addEventListener('click', function () {
+					  	// identify what size they selected
+					  	var size = document.getElementById("store-item-size")
+						var selectedSize = size.options[size.selectedIndex].value;
+						var sku = null;
+
+						if (selectedSize == 1) {
+							sku = 'sku_FUo9OlFekHA0qL'
+						} else if (selectedSize == 2) {
+							sku = 'sku_FUoMajQGPsDqwS'
+						} else if (selectedSize == 3) {
+							sku = 'sku_FUoLGpBlWfjjgZ'
+						}
+
+					    // When the customer clicks on the button, redirect
+					    // them to Checkout.
+					    if (sku != null) {
+					    stripe.redirectToCheckout({
+
+					      items: [{sku: 'sku_FUo9OlFekHA0qL', quantity: 1}],
+
+					      // Do not rely on the redirect to the successUrl for fulfilling
+					      // purchases, customers may not always reach the success_url after
+					      // a successful payment.
+					      // Instead use one of the strategies described in
+					      // https://stripe.com/docs/payments/checkout/fulfillment
+					      successUrl: 'http://thinkdavid.xyz/#/store/success',
+					      cancelUrl: 'http://thinkdavid.xyz/#/store/cancel',
+					    })
+					    .then(function (result) {
+					      if (result.error) {
+					        // If `redirectToCheckout` fails due to a browser or network
+					        // error, display the localized error message to your customer.
+					        var displayError = document.getElementById('error-message');
+					        displayError.textContent = result.error.message;
+					      }
+					    });
+						}
+					  });
+					</script>
+				</div>
+			</div>
+
+		</div>
+	</section>
+
+	<hr>
+
+</section>
