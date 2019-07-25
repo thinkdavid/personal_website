@@ -67,6 +67,10 @@ mainApp.config(function($routeProvider) {
       controller:'TravelController',
       templateUrl:'colombia.html'
     })
+    .when('/chicago', {
+      controller:'TravelController',
+      templateUrl:'chicago.html'
+    })
     .when('/store', {
       controller:'StoreController',
       templateUrl:'store.html'
