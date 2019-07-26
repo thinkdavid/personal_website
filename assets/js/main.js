@@ -22,6 +22,13 @@ $(function() {
         $('.lazy').lazy();
 });
 
+simpleCart({
+    checkout: {
+      type: "PayPal",
+      email: "davidbecher95@gmail.com"
+    }
+  });
+
 
 /***** Angular *****/
 
