@@ -33,7 +33,7 @@ simpleCart({
 /***** Angular *****/
 
 // Define the main module
-var mainApp = angular.module('mainApp', ['ngRoute']);
+var mainApp = angular.module('mainApp', ['ngSanitize', 'ngRoute']);
 
 mainApp.config(function($routeProvider) {
   console.log($routeProvider)
@@ -73,6 +73,10 @@ mainApp.config(function($routeProvider) {
     .when('/colombia', {
       controller:'TravelController',
       templateUrl:'colombia.html'
+    })
+    .when('/chicago', {
+      controller:'TravelController',
+      templateUrl:'chicago.html'
     })
     .when('/store', {
       controller:'StoreController',
