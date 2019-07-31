@@ -703,6 +703,12 @@
 			opacity: 0.5;
 		}
 
+		button.shopping-cart {
+			font-family: FontAwesome;
+			content: '\f07a';
+		}
+		
+
 /* Main */
 
 	#welcome, #photos, #writing, #main, #travel, #about, #store, #travel-post {
