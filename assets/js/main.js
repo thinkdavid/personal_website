@@ -82,6 +82,14 @@ mainApp.config(function($routeProvider) {
       controller: 'StoreController',
       templateUrl: 'store_items/halong_bay.html'
     })
+    .when('/store/boat_vietnam', {
+      controller: 'StoreController',
+      templateUrl: 'store_items/boat_vietnam.html'
+    })
+    .when('/store/lone_flower', {
+      controller: 'StoreController',
+      templateUrl: 'store_items/flower_peru.html'
+    })
     .otherwise({
       redirectTo:'/'
     });
