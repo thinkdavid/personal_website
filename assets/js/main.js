@@ -22,14 +22,6 @@ $(function() {
         $('.lazy').lazy();
 });
 
-simpleCart({
-    checkout: {
-      type: "PayPal",
-      email: "davidbecher95@gmail.com"
-    }
-  });
-
-
 /***** Angular *****/
 
 // Define the main module
@@ -81,6 +73,10 @@ mainApp.config(function($routeProvider) {
     .when('/store', {
       controller:'StoreController',
       templateUrl:'store.html'
+    })
+    .when('/store/success', {
+      controller:'StoreController',
+      templateUrl:'success.html'
     })
     .when('/store/halong_bay', {
       controller: 'StoreController',

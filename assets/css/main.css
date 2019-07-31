@@ -741,7 +741,7 @@
 			text-align: center;
 		}
 
-		.store-title {
+		.store-title, .store-price{
 			text-align: center;
 			font-style: italic;
 			font-size: .8em;
@@ -749,10 +749,23 @@
 		}
 
 		.store-price {
-			text-align: center;
-			text-transform: none;
-			font-size: .75em;
+			font-style: normal;
 		}
+
+		.store-header {
+			display: flex;
+    		align-items: center;
+		}
+
+		.shopping-cart {
+			width: 1.5em;
+			height: 1.5em;
+			margin: 0 0 0.525em 0;
+			line-height: 1.5em;
+  			height: 1.5em;
+  			vertical-align: center;
+		}
+
 
 		.piece {
 			padding: 1em;
