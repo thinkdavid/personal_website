@@ -50,6 +50,10 @@ mainApp.config(function($routeProvider) {
       controller:'MusicController',
       templateUrl:'music.html'
     })
+    .when('/resources', {
+      controller:'ResourceController',
+      templateUrl:'resources.html'
+    })
     .when('/travel', {
       controller:'TravelController',
       templateUrl:'travel.html'
@@ -188,6 +192,13 @@ mainApp.controller('EssayListController', function EssayListController($scope, $
 });
 
 mainApp.controller('MusicController', function MusicController($scope, $location) {
+  $scope.selectNewPage = function() {
+    // console.log("new page");
+    window.scrollTo(0, 0);
+  };
+});
+
+mainApp.controller('ResourceController', function ResourceController($scope, $location) {
   $scope.selectNewPage = function() {
     // console.log("new page");
     window.scrollTo(0, 0);

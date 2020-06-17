@@ -711,7 +711,7 @@
 
 /* Main */
 
-	#welcome, #photos, #writing, #main, #travel, #about, #store, #travel-post {
+	#welcome, #photos, #writing, #main, #travel, #about, #store, #travel-post, #resources {
 		position: relative;
 		min-width: 40em;
 		padding: 4.5em 3em 3em 3em ;
@@ -783,7 +783,7 @@
 			text-align: center;
 		}
 
-		#travel-post .travel-body {
+		#travel-post .travel-body  {
 			text-align: left;
 			text-transform: none;
 			color: black;
@@ -802,6 +802,17 @@
 
 		#travel-post h3 {
 			font-weight: bold;
+		}
+
+	#resource-body {
+		text-transform: none;
+	}
+		#resources .resource-section {
+			text-align: left;
+		}
+
+		#resources .resource-section a {
+			color: hotpink;
 		}
 
 	.hidden {
