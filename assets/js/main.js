@@ -50,9 +50,9 @@ mainApp.config(function($routeProvider) {
       controller:'MusicController',
       templateUrl:'music.html'
     })
-    .when('/resources', {
-      controller:'ResourceController',
-      templateUrl:'resources.html'
+    .when('/black-lives-matter', {
+      controller:'BLMController',
+      templateUrl:'black-lives-matter.html'
     })
     .when('/travel', {
       controller:'TravelController',
@@ -198,7 +198,7 @@ mainApp.controller('MusicController', function MusicController($scope, $location
   };
 });
 
-mainApp.controller('ResourceController', function ResourceController($scope, $location) {
+mainApp.controller('BLMController', function BLMController($scope, $location) {
   $scope.selectNewPage = function() {
     // console.log("new page");
     window.scrollTo(0, 0);
