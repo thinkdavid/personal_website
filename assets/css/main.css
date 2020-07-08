@@ -130,8 +130,8 @@
 /* Type */
 
 	body, input, select, textarea {
-		color: #000033;
-		font-family: "Times New Roman", Helvetica, sans-serif;
+		color: #4b6e7d;
+		font-family: "Source Sans Pro", Helvetica, sans-serif;
 		font-size: 14pt;
 		font-weight: 600;
 		line-height: 2;
@@ -174,11 +174,11 @@
 		}
 
 		a:hover {
-			color: #2f5d6a;
+			color: #96034d;
 		}
 
 	strong, b {
-		color: #000033;
+		color: #134553;
 	}
 
 	em, i {
@@ -190,7 +190,7 @@
 	}
 
 	h1, h2, h3, h4, h5, h6 {
-		color: #000033;
+		color: #134553;
 		line-height: 1.5;
 		margin: 0 0 0.75em 0;
 	}
@@ -267,7 +267,7 @@
 			}
 
 	label {
-		color: #000033;
+		color: #134553;
 		display: block;
 		font-size: 0.9em;
 		margin: 0 0 0.75em 0;
@@ -812,7 +812,7 @@
 		}
 
 		#resources .resource-section a {
-			color: hotpink;
+			color: #df7480;
 		}
 
 	.hidden {
