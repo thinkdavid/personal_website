@@ -130,7 +130,7 @@
 /* Type */
 
 	body, input, select, textarea {
-		color: #414f57;
+		color: #000033;
 		font-family: "Times New Roman", Helvetica, sans-serif;
 		font-size: 14pt;
 		font-weight: 600;
@@ -174,11 +174,11 @@
 		}
 
 		a:hover {
-			color: #ff7496;
+			color: #2f5d6a;
 		}
 
 	strong, b {
-		color: #313f47;
+		color: #000033;
 	}
 
 	em, i {
@@ -190,7 +190,7 @@
 	}
 
 	h1, h2, h3, h4, h5, h6 {
-		color: #313f47;
+		color: #000033;
 		line-height: 1.5;
 		margin: 0 0 0.75em 0;
 	}
@@ -267,7 +267,7 @@
 			}
 
 	label {
-		color: #313f47;
+		color: #000033;
 		display: block;
 		font-size: 0.9em;
 		margin: 0 0 0.75em 0;
