@@ -31,8 +31,8 @@ mainApp.config(function($routeProvider) {
   console.log($routeProvider)
   $routeProvider
     .when('/', {
-      controller:'BLMController',
-      templateUrl:'black-lives-matter.html'
+      controller:'MainController',
+      templateUrl:'main.html'
     })
     .when('/about', {
       controller:'MainController',
