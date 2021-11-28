@@ -66,9 +66,17 @@ mainApp.config(function($routeProvider) {
       controller:'TravelController',
       templateUrl:'peru.html'
     })
-    .when('/colombia', {
+    .when('/medellin', {
       controller:'TravelController',
-      templateUrl:'colombia.html'
+      templateUrl:'medellin.html'
+    })
+    .when('/cartagena', {
+      controller:'TravelController',
+      templateUrl:'cartagena.html'
+    })
+    .when('/bogota', {
+      controller:'TravelController',
+      templateUrl:'bogota.html'
     })
     .when('/chicago', {
       controller:'TravelController',
