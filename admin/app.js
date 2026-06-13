@@ -143,7 +143,7 @@ async function generate() {
 
     el.snippetPreview.value = snippetHtml
     el.pagePreview.value = workPageHtml
-    setStatus(`Published ${data.slugValue} using ${data.workName} marker folders.`, 'success')
+    setStatus(`Published ${data.slugValue} to index.html and gallery.html using ${data.workName} marker folders.`, 'success')
   } catch (error) {
     setStatus(error.message, 'error')
   } finally {

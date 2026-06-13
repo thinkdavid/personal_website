@@ -87,14 +87,18 @@ export async function publishWorkEntry(rootHandle, payload, loadDependencies = l
   const snippetHtml = buildSnippetHtml(snippetTemplate, payload)
   const workPageHtml = buildWorkPageHtml(workTemplate, payload)
   const indexHtml = await readTextFile(rootHandle, 'index.html')
-  if (hasSlugEntry(indexHtml, payload.slug)) {
+  const galleryHtml = await readTextFile(rootHandle, 'gallery.html')
+  if (hasSlugEntry(indexHtml, payload.slug) || hasSlugEntry(galleryHtml, payload.slug)) {
     throw new Error(`Homepage already contains an entry for slug "${payload.slug}".`)
   }
   const updatedIndex = insertSnippetAtAnchor(indexHtml, snippetHtml)
+  const updatedGallery = insertSnippetAtAnchor(galleryHtml, snippetHtml)
 
   await writeTextFile(rootHandle, 'index.html.backup', indexHtml)
+  await writeTextFile(rootHandle, 'gallery.html.backup', galleryHtml)
   await writeTextFile(rootHandle, `work/${payload.slug}.html`, workPageHtml)
   await writeTextFile(rootHandle, 'index.html', updatedIndex)
+  await writeTextFile(rootHandle, 'gallery.html', updatedGallery)
 
   return { snippetHtml, workPageHtml }
 }

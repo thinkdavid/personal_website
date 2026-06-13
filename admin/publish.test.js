@@ -175,7 +175,7 @@ test('collectPhotoPaths throws a friendly error when the work folder is missing'
   await assert.rejects(() => collectPhotoPaths(rootHandle, 'peru'), /expected peru\/landscape and peru\/portrait/i)
 })
 
-test('publishWorkEntry writes backup, work page, and updated index via injected dependencies', async () => {
+test('publishWorkEntry writes backups, work page, and updated index/gallery via injected dependencies', async () => {
   const writes = []
   const payload = { slug: 'iceland-dawn', title: 'Iceland Dawn' }
 
@@ -184,6 +184,7 @@ test('publishWorkEntry writes backup, work page, and updated index via injected 
       if (path === 'workSnippetWithVariables.html') return 'snippet-template'
       if (path === 'work/work-page-with-variables.html') return 'work-template'
       if (path === 'index.html') return '<main><div role="list" class="work-list_list w-dyn-items"></div></main>'
+      if (path === 'gallery.html') return '<main><div role="list" class="work-list_list w-dyn-items"></div></main>'
       throw new Error(`Unexpected read: ${path}`)
     },
     writeTextFile: async (_root, path, contents) => {
@@ -198,10 +199,15 @@ test('publishWorkEntry writes backup, work page, and updated index via injected 
   assert.equal(result.workPageHtml, 'work-template:iceland-dawn')
   assert.deepEqual(writes.map((w) => w.path), [
     'index.html.backup',
+    'gallery.html.backup',
     'work/iceland-dawn.html',
-    'index.html'
+    'index.html',
+    'gallery.html'
   ])
-  assert.match(writes[2].contents, /snippet-template:Iceland Dawn/)
+  const writtenByPath = Object.fromEntries(writes.map((write) => [write.path, write.contents]))
+  assert.match(writtenByPath['work/iceland-dawn.html'], /work-template:iceland-dawn/)
+  assert.match(writtenByPath['index.html'], /snippet-template:Iceland Dawn/)
+  assert.match(writtenByPath['gallery.html'], /snippet-template:Iceland Dawn/)
 })
 
 test('publishWorkEntry throws when index already has the same work slug', async () => {
@@ -214,6 +220,9 @@ test('publishWorkEntry throws when index already has the same work slug', async 
       if (path === 'work/work-page-with-variables.html') return 'work-template'
       if (path === 'index.html') {
         return '<main><a href="/work/iceland-dawn">Existing</a><div role="list" class="work-list_list w-dyn-items"></div></main>'
+      }
+      if (path === 'gallery.html') {
+        return '<main><div role="list" class="work-list_list w-dyn-items"></div></main>'
       }
       throw new Error(`Unexpected read: ${path}`)
     },
@@ -243,6 +252,9 @@ test('publishWorkEntry detects duplicate slug links with .html in relative and a
         if (path === 'work/work-page-with-variables.html') return 'work-template'
         if (path === 'index.html') {
           return `<main><a href="${href}">Existing</a><div role="list" class="work-list_list w-dyn-items"></div></main>`
+        }
+        if (path === 'gallery.html') {
+          return '<main><div role="list" class="work-list_list w-dyn-items"></div></main>'
         }
         throw new Error(`Unexpected read: ${path}`)
       },
