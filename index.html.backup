@@ -74,6 +74,102 @@
           class="section_work-list">
           <div class="work-list_wrapper w-dyn-list">
             <div role="list" class="work-list_list w-dyn-items">
+<!-- Variables
+urlSlug              - i.e. cinque-terre
+coverPhotoAlt        - i.e. Cinque Terre at night
+imageUrl             - i.e. The whole URL except for the .
+imageSuffix          - i.e. Image suffix - , avid, png, etc
+title                - i.e. Cinque Terre
+subtitle             - Photography, Digital: 2019
+-->
+<div role="listitem" class="work-list_item w-dyn-item">
+   <a aria-label="link to project" href="work/cinque-terre.html" class="work-list_block w-inline-block">
+      <div class="work-list_content">
+         <img
+            src="cinqueterre/landscape/CinqueTerre-1912.jpg"
+            loading="lazy"
+            alt="Cinque Terre"
+            sizes="100vw"
+            srcset="cinqueterre/landscape/CinqueTerre-1912.jpg"
+            class="work-list_image"
+         />
+         <div class="work-list_infos">
+            <div class="padding-global">
+               <div class="work-list_infos-content">
+                  <h2>Cinque Terre</h2>
+                  <div>Photography, Digital: 2019</div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="work-list_content black-text w-condition-invisible">
+         <img
+            src="cinqueterre/landscape/CinqueTerre-1912.jpg"
+            loading="lazy"
+            alt="Cinque Terre"
+            sizes="100vw"
+            srcset="cinqueterre/landscape/CinqueTerre-1912.jpg"
+            class="work-list_image"
+         />
+         <div class="work-list_infos">
+            <div class="padding-global">
+               <div class="work-list_infos-content">
+                  <h2>Cinque Terre</h2>
+                  <div>Photography, Digital: 2019</div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </a>
+</div>
+<!-- Variables
+urlSlug              - i.e. cinque-terre
+coverPhotoAlt        - i.e. Cinque Terre at night
+imageUrl             - i.e. The whole URL except for the .
+imageSuffix          - i.e. Image suffix - , avid, png, etc
+title                - i.e. Cinque Terre
+subtitle             - Photography, Digital: 2019
+-->
+<div role="listitem" class="work-list_item w-dyn-item">
+   <a aria-label="link to project" href="work/guadalajara-mexico.html" class="work-list_block w-inline-block">
+      <div class="work-list_content">
+         <img
+            src="mexico/landscape/gdl-0441.jpg"
+            loading="lazy"
+            alt="Guadalajara, Mexico"
+            sizes="100vw"
+            srcset="mexico/landscape/gdl-0441.jpg"
+            class="work-list_image"
+         />
+         <div class="work-list_infos">
+            <div class="padding-global">
+               <div class="work-list_infos-content">
+                  <h2>Guadalajara, Mexico</h2>
+                  <div>Photography, Film: 2021</div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="work-list_content black-text w-condition-invisible">
+         <img
+            src="mexico/landscape/gdl-0441.jpg"
+            loading="lazy"
+            alt="Guadalajara, Mexico"
+            sizes="100vw"
+            srcset="mexico/landscape/gdl-0441.jpg"
+            class="work-list_image"
+         />
+         <div class="work-list_infos">
+            <div class="padding-global">
+               <div class="work-list_infos-content">
+                  <h2>Guadalajara, Mexico</h2>
+                  <div>Photography, Film: 2021</div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </a>
+</div>
               <div role="listitem" class="work-list_item w-dyn-item">
                 <a aria-label="link to project"
                   href="work/pereira-colombia.html"
