@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Site Update UI</title>
+    <link rel="stylesheet" href="./admin.css">
+  </head>
+  <body>
+    <main class="app">
+      <section class="panel">
+        <header class="panel-header">
+          <h1>Site Update UI</h1>
+          <p id="rootLabel" class="muted">No folder selected yet</p>
+        </header>
+
+        <div class="toolbar">
+          <button type="button" id="pickRoot">Select project folder</button>
+          <button type="button" id="generate">Generate and publish</button>
+        </div>
+
+        <form id="photoForm" novalidate>
+          <label class="field">
+            <span>Title</span>
+            <input id="title" name="title" autocomplete="off">
+            <small class="field-error" data-error-for="title"></small>
+          </label>
+
+          <label class="field">
+            <span>Subtitle</span>
+            <input id="subtitle" name="subtitle" autocomplete="off">
+            <small class="field-error" data-error-for="subtitle"></small>
+          </label>
+
+          <label class="field">
+            <span>Slug</span>
+            <input id="slug" name="slug" autocomplete="off">
+            <small class="field-error" data-error-for="slug"></small>
+          </label>
+
+          <label class="field">
+            <span>Work folder name (optional)</span>
+            <input id="workName" name="workName" autocomplete="off" placeholder="defaults to slug">
+            <p class="muted">Required image structure: {workName}/{landscape|portrait}/fileNames.jpg</p>
+            <small class="field-error" data-error-for="workName"></small>
+          </label>
+
+          <label class="field">
+            <span>Caption (optional)</span>
+            <textarea
+              id="caption"
+              name="caption"
+              rows="4"
+              autocomplete="off"
+              placeholder="Cartagena de Indias will always have a piece of my heart..."
+            ></textarea>
+            <small class="field-error" data-error-for="caption"></small>
+          </label>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2>Generated snippet</h2>
+        <textarea id="snippetPreview" readonly spellcheck="false"></textarea>
+
+        <h2>Generated work page</h2>
+        <textarea id="pagePreview" readonly spellcheck="false"></textarea>
+
+        <p id="status" class="status" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
