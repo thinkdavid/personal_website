@@ -1755,13 +1755,32 @@ figcaption {
 }
 
 .collection-list {
-  column-count: 2;
-  display: block;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  display: grid;
   overflow: visible;
 }
 
 .collection-item {
   width: 100%;
+}
+
+.collection-list:before,
+.collection-list:after {
+  display: none;
+}
+
+.collection-list .collection-item.w-col {
+  float: none;
+  width: auto;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+@media screen and (min-width: 1200px) {
+  .collection-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .image {
@@ -2029,6 +2048,10 @@ figcaption {
 
   .resources_group {
     grid-row-gap: 1.5rem;
+  }
+
+  .collection-list {
+    grid-template-columns: 1fr;
   }
 
   .padding-section-xlarge {
