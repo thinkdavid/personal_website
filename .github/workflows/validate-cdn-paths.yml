@@ -5,49 +5,57 @@ on:
     - cron: '0 6 * * *'  # Daily at 6 AM UTC
   workflow_dispatch:
 
+env:
+  AZURE_CDN_HOSTNAME: thinkdavid-images.azureedge.net
+
 jobs:
-  validate:
+  validate-cdn:
     runs-on: ubuntu-latest
+    name: CDN Health Check
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Check CDN URLs exist and are accessible
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify curl is available
         run: |
-          echo "Checking CDN image delivery (case-sensitive)..."
-          echo ""
+          which curl
+          curl --version
+
+      - name: Make cdn-test.sh executable
+        run: chmod +x .github/cdn-test.sh
+
+      - name: Run CDN validation tests
+        env:
+          AZURE_CDN_HOSTNAME: ${{ env.AZURE_CDN_HOSTNAME }}
+        run: ./.github/cdn-test.sh
+
+      - name: Performance metrics (optional)
+        if: always()
+        run: |
+          echo "=== CDN Performance Summary ==="
+          echo "Testing response times from CDN..."
           
-          # Extract unique CDN URLs from HTML
-          URLS=$(grep -rho 'https://[^"]*azureedge\.net/[^"]*' index.html gallery.html work/*.html 2>/dev/null | sort -u)
-          
-          if [ -z "$URLS" ]; then
-            echo "No CDN URLs found in HTML - OK if Blob Storage not configured"
-            exit 0
-          fi
-          
-          FAILURES=0
-          for url in $URLS; do
-            status=$(curl -s -o /dev/null -w "%{http_code}" "$url")
-            if [ "$status" = "200" ]; then
-              echo "✓ $url"
-            else
-              echo "✗ $url ($status)"
-              ((FAILURES++))
-            fi
+          TEST_URL="https://${{ env.AZURE_CDN_HOSTNAME }}/images/peru/landscape/DSC_0818.jpg"
+          for i in {1..3}; do
+            response_time=$(curl -s -w "%{time_total}" -o /dev/null "$TEST_URL")
+            echo "  Sample URL response time (attempt $i): ${response_time}s"
           done
           
-          if [ $FAILURES -gt 0 ]; then
-            echo "ERROR: $FAILURES CDN URLs failed"
-            exit 1
-          fi
-          
-      - name: Validate case-sensitivity in paths
+          echo "=== Test completed ==="
+
+      - name: Notify on failure
+        if: failure()
         run: |
-          echo "Checking for case-sensitivity issues..."
-          
-          # Check for known case mismatches
-          if grep -r "peopleofsicily\|perú\|méxico" index.html gallery.html work/ 2>/dev/null; then
-            echo "ERROR: Found case-sensitivity violations"
-            exit 1
-          fi
-          
-          echo "✓ No case-sensitivity issues found"
+          echo "⚠️ CDN validation failed!"
+          echo "Check the workflow logs for details: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## CDN Validation Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **CDN Hostname**: ${{ env.AZURE_CDN_HOSTNAME }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Timestamp**: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "- **Workflow**: ${{ github.workflow }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Run ID**: ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
