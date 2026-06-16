@@ -1,0 +1,63 @@
+#!/bin/bash
+set -e
+
+CDN_HOSTNAME="${AZURE_CDN_HOSTNAME}"
+if [ -z "$CDN_HOSTNAME" ]; then
+  echo "Error: AZURE_CDN_HOSTNAME not set"
+  exit 1
+fi
+
+echo "Testing CDN delivery..."
+echo "Verifying case-sensitive paths are accessible..."
+echo ""
+
+# Test a few known image URLs with exact case
+TEST_URLS=(
+  "https://$CDN_HOSTNAME/peru/landscape/DSC_0818.jpg"
+  "https://$CDN_HOSTNAME/mexico/landscape/DSC_3485.jpg"
+  "https://$CDN_HOSTNAME/peopleOfSicily/landscape/siciliajul2024-265.jpg"
+)
+
+FAILURES=0
+for url in "${TEST_URLS[@]}"; do
+  echo "Testing: $url"
+  http_code=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+  if [ "$http_code" = "200" ]; then
+    echo "✓ OK ($http_code)"
+  else
+    echo "✗ FAILED ($http_code)"
+    ((FAILURES++))
+  fi
+done
+
+echo ""
+echo "Checking HTML files for CDN paths..."
+grep_count=$(grep -r "azureedge.net" index.html gallery.html work/ 2>/dev/null | wc -l)
+echo "Found $grep_count CDN URLs in HTML files"
+
+if [ "$grep_count" -gt 0 ]; then
+  echo "✓ CDN paths present"
+else
+  echo "✗ No CDN paths found"
+  ((FAILURES++))
+fi
+
+echo ""
+echo "Checking for case mismatches (should be 0)..."
+# Check for any lowercase directory names that shouldn't be there
+mismatches=$(grep -r "peopleofsicily\|perú\|méxico" index.html gallery.html work/ 2>/dev/null | wc -l || echo "0")
+if [ "$mismatches" = "0" ]; then
+  echo "✓ No case-sensitivity issues found"
+else
+  echo "✗ WARNING: Found $mismatches potential case mismatches"
+  ((FAILURES++))
+fi
+
+if [ $FAILURES -gt 0 ]; then
+  echo ""
+  echo "ERRORS: $FAILURES issue(s) found"
+  exit 1
+else
+  echo ""
+  echo "✓ All CDN tests passed!"
+fi

@@ -1,0 +1,53 @@
+name: Validate CDN Paths
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 6 AM UTC
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check CDN URLs exist and are accessible
+        run: |
+          echo "Checking CDN image delivery (case-sensitive)..."
+          echo ""
+          
+          # Extract unique CDN URLs from HTML
+          URLS=$(grep -rho 'https://[^"]*azureedge\.net/[^"]*' index.html gallery.html work/*.html 2>/dev/null | sort -u)
+          
+          if [ -z "$URLS" ]; then
+            echo "No CDN URLs found in HTML - OK if Blob Storage not configured"
+            exit 0
+          fi
+          
+          FAILURES=0
+          for url in $URLS; do
+            status=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+            if [ "$status" = "200" ]; then
+              echo "✓ $url"
+            else
+              echo "✗ $url ($status)"
+              ((FAILURES++))
+            fi
+          done
+          
+          if [ $FAILURES -gt 0 ]; then
+            echo "ERROR: $FAILURES CDN URLs failed"
+            exit 1
+          fi
+          
+      - name: Validate case-sensitivity in paths
+        run: |
+          echo "Checking for case-sensitivity issues..."
+          
+          # Check for known case mismatches
+          if grep -r "peopleofsicily\|perú\|méxico" index.html gallery.html work/ 2>/dev/null; then
+            echo "ERROR: Found case-sensitivity violations"
+            exit 1
+          fi
+          
+          echo "✓ No case-sensitivity issues found"
