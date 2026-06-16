@@ -6,6 +6,7 @@ This is a personal portfolio website for photographer/designer David. The projec
 - **Frontend:** Webflow-generated HTML/CSS with custom styling
 - **Admin tools:** Node.js utilities for publishing portfolio work entries
 - **Test framework:** Node's built-in `test` module with `assert/strict`
+- **MCP Servers:** Playwright (page testing), GitHub (PR automation), Filesystem (file access)
 
 The core workflow publishes photography work entries by combining directory scanning, HTML generation, and index page updates.
 
@@ -134,9 +135,25 @@ See `admin/GENERATOR-SPEC.md` for complete path handling API documentation.
 
 When enhancing the portfolio:
 
-1. **For publishing fixes/features:** Modify `admin/` files; run tests via `node admin/publish.test.js`
+1. **For publishing fixes/features:** Modify `admin/` files; run tests via `npm test`
 2. **For portfolio content:** Add work folders in `work/` directory following the landscape/portrait structure
 3. **For styling:** Webflow files are authoritative for design; use `css/thinkdavid.webflow.css` for custom overrides
 4. **For new work pages:** Use existing `work/guadalajara-mexico.html` as template (copy, update title/subtitle/images)
+5. **For testing rendered pages:** Use Playwright MCP to verify published portfolio pages display correctly
+6. **For PR management:** Use GitHub MCP to create PRs and manage issues
 
 Posts should be processed in descending order (newest first).
+
+## MCP Server Integration
+
+See `.github/mcp-servers.md` for complete configuration instructions.
+
+**Three MCP servers are available:**
+- **Playwright** — Test published portfolio pages (responsive layout, image loading, lightbox)
+- **GitHub** — Manage PRs, issues, and CI/CD workflows
+- **Filesystem** — Direct file access within the repository
+
+To use them:
+1. Follow setup instructions in `.github/mcp-servers.md`
+2. Configure `claude_desktop_config.json` with authentication tokens
+3. Ask Copilot to use specific servers: "Use Playwright MCP to test the Sicily page on mobile"
