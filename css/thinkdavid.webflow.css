@@ -1800,7 +1800,8 @@ figcaption {
 }
 
 .container-medium-portraits {
-  max-width: 940px;
+  width: 100%;
+  max-width: 110rem;
 }
 
 .containe {
@@ -1835,7 +1836,21 @@ figcaption {
   padding-right: 0;
 }
 
-@media screen and (min-width: 1200px) {
+.collection-list .collection-item img {
+  width: 100%;
+  display: block;
+}
+
+.collection-list .collection-item .w-inline-block {
+  width: 100%;
+  display: block;
+}
+
+@media screen and (min-width: 992px) {
+  .container-medium-portraits {
+    width: 80%;
+  }
+
   .collection-list {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
