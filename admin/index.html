@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Site Update UI</title>
-    <link rel="stylesheet" href="./admin.css" />
+    <link rel="stylesheet" href="./admin.css">
   </head>
   <body>
     <main class="app">
@@ -22,34 +22,26 @@
         <form id="photoForm" novalidate>
           <label class="field">
             <span>Title</span>
-            <input id="title" name="title" autocomplete="off" />
+            <input id="title" name="title" autocomplete="off">
             <small class="field-error" data-error-for="title"></small>
           </label>
 
           <label class="field">
             <span>Subtitle</span>
-            <input id="subtitle" name="subtitle" autocomplete="off" />
+            <input id="subtitle" name="subtitle" autocomplete="off">
             <small class="field-error" data-error-for="subtitle"></small>
           </label>
 
           <label class="field">
             <span>Slug</span>
-            <input id="slug" name="slug" autocomplete="off" />
+            <input id="slug" name="slug" autocomplete="off">
             <small class="field-error" data-error-for="slug"></small>
           </label>
 
           <label class="field">
             <span>Work folder name (optional)</span>
-            <input
-              id="workName"
-              name="workName"
-              autocomplete="off"
-              placeholder="defaults to slug"
-            />
-            <p class="muted">
-              Required image structure:
-              {workName}/{landscape|portrait}/fileNames.jpg
-            </p>
+            <input id="workName" name="workName" autocomplete="off" placeholder="defaults to slug">
+            <p class="muted">Required image structure: {workName}/{landscape|portrait}/fileNames.jpg</p>
             <small class="field-error" data-error-for="workName"></small>
           </label>
 

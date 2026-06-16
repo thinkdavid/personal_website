@@ -7,46 +7,46 @@ title                - i.e. Cinque Terre
 subtitle             - Photography, Digital: 2019
 -->
 <div role="listitem" class="work-list_item w-dyn-item">
-  <a
-    aria-label="link to project"
-    href="work/{urlSlug}.html"
-    class="work-list_block w-inline-block"
-  >
-    <div class="work-list_content">
-      <img
-        src="{imageUrl}"
-        loading="lazy"
-        alt="{coverPhotoAlt}"
-        sizes="100vw"
-        srcset="{imageUrl}"
-        class="work-list_image"
-      />
-      <div class="work-list_infos">
-        <div class="padding-global">
-          <div class="work-list_infos-content">
-            <h2>{title}</h2>
-            <div>{subtitle}</div>
-          </div>
-        </div>
+   <a aria-label="link to project" href="work/{urlSlug}.html" class="work-list_block w-inline-block">
+      <div class="work-list_content">
+         <img
+            src="{imageUrl}"
+            loading="lazy"
+            alt="{coverPhotoAlt}"
+            sizes="100vw"
+            srcset="
+               {imageUrl}
+            "
+            class="work-list_image"
+         />
+         <div class="work-list_infos">
+            <div class="padding-global">
+               <div class="work-list_infos-content">
+                  <h2>{title}</h2>
+                  <div>{subtitle}</div>
+               </div>
+            </div>
+         </div>
       </div>
-    </div>
-    <div class="work-list_content black-text w-condition-invisible">
-      <img
-        src="{imageUrl}"
-        loading="lazy"
-        alt="{coverPhotoAlt}"
-        sizes="100vw"
-        srcset="{imageUrl}"
-        class="work-list_image"
-      />
-      <div class="work-list_infos">
-        <div class="padding-global">
-          <div class="work-list_infos-content">
-            <h2>{title}</h2>
-            <div>{subtitle}</div>
-          </div>
-        </div>
+      <div class="work-list_content black-text w-condition-invisible">
+         <img
+            src="{imageUrl}"
+            loading="lazy"
+            alt="{coverPhotoAlt}"
+            sizes="100vw"
+            srcset="
+               {imageUrl}
+            "
+            class="work-list_image"
+         />
+         <div class="work-list_infos">
+            <div class="padding-global">
+               <div class="work-list_infos-content">
+                  <h2>{title}</h2>
+                  <div>{subtitle}</div>
+               </div>
+            </div>
+         </div>
       </div>
-    </div>
-  </a>
+   </a>
 </div>
