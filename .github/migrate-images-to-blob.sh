@@ -11,7 +11,7 @@ NC='\033[0m'
 CONTAINER_NAME="${AZURE_STORAGE_CONTAINER_NAME:-images}"
 STORAGE_ACCOUNT="$AZURE_STORAGE_ACCOUNT_NAME"
 PROGRESS_FILE="${PROGRESS_FILE:-.migration-progress}"
-IMAGE_DIRS=("peru" "mexico" "pereira" "cinqueterre" "peopleOfSicily")
+IMAGE_DIRS=("peru" "mexico" "pereira" "cinqueterre" "peopleOfSicily" "family")
 
 if [ -z "$STORAGE_ACCOUNT" ]; then
   echo -e "${RED}Error: AZURE_STORAGE_ACCOUNT_NAME not set${NC}"
