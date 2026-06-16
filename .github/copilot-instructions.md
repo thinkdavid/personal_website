@@ -13,20 +13,32 @@ The core workflow publishes photography work entries by combining directory scan
 
 ### Run Tests
 ```bash
-node admin/publish.test.js
+npm test
 ```
-All tests pass (20+ test cases covering HTML insertion, file classification, photo collection, and publishing).
+All 26 tests pass, covering HTML insertion, file classification, photo collection, publishing, and cross-platform path handling.
 
 ### Run Single Test
-The test file uses Node's built-in test runner. To run individual tests:
 ```bash
-node --test --grep "insertSnippetAtAnchor" admin/publish.test.js
+npm run test:single "test name pattern"
+# Example: npm run test:single "case"
+```
+
+Or directly with Node:
+```bash
+node --test --grep "slugify" admin/publish.test.js
 ```
 
 ### Test Coverage Areas
 - `publish.js` — HTML snippet insertion, marker path classification, photo collection
 - `generator.js` — HTML generation, slug creation, image path sanitization
-- Error handling for invalid folder structures, missing files, duplicate entries
+- `publish.test.js` — 26 test cases covering:
+  - Happy path publishing workflows
+  - XSS/injection sanitization (HTML entities, URI encoding)
+  - Cross-platform path handling (case-sensitivity, Windows separators)
+  - Error handling for invalid folder structures, missing files, duplicate entries
+
+### Cross-Platform CI/CD
+Tests automatically run on GitHub Actions for Windows, macOS, and Linux. Branch must pass all platforms before merging.
 
 ## Architecture & Conventions
 
@@ -85,9 +97,10 @@ This anchor marks where new work entries are inserted in `index.html`.
 - Snippet inserted at anchor with newline preservation
 
 **Testing Philosophy:**
-- Tests are comprehensive (20+ cases) covering happy paths and error conditions
+- Tests are comprehensive (26 cases) covering happy paths, error conditions, and cross-platform edge cases
 - Error messages are explicit and developer-friendly
 - File operations tested through dependency injection (no real files)
+- New tests verify case-sensitivity and Windows path separator handling
 
 ## Browser Compatibility
 
@@ -96,6 +109,26 @@ Admin publishing interface requires:
 - `showDirectoryPicker()` not available in Safari or Firefox
 
 The published portfolio pages work on all modern browsers (standard HTML/CSS).
+
+## Critical: Cross-Platform Path Handling
+
+**This codebase runs on Windows, macOS, and Linux. Case-sensitivity varies by platform:**
+
+- **macOS (default):** Case-insensitive filesystem, but preserves directory case
+- **Linux:** Case-sensitive filesystem
+- **Windows:** Case-insensitive filesystem, but preserves directory case
+
+### Path Handling Rules
+1. **Always preserve exact case** — Directory `peopleOfSicily` must be referenced as `peopleOfSicily`, not `peopleofsicily`
+2. **Normalize separators** — `generator.js` converts backslashes (`\`) to forward slashes (`/`) for web URLs
+3. **Path sanitization** — All paths are URI-encoded and validated; relative paths with `..` are rejected
+
+### Known Issue (Fixed)
+- **Problem:** Directory named `peopleOfSicily` but `index.html` referenced `peopleofsicily` (broke on Linux)
+- **Fix:** Updated to use correct case; added tests to prevent regression
+- **Prevention:** 2 new cross-platform tests verify case-sensitivity and Windows path separators
+
+See `admin/GENERATOR-SPEC.md` for complete path handling API documentation.
 
 ## Getting Started
 
