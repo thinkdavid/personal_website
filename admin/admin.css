@@ -1,6 +1,12 @@
 :root {
   color-scheme: light;
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   --bg: #f5f1ea;
   --panel: #ffffff;
   --text: #181818;
@@ -128,11 +134,11 @@ textarea {
   min-height: 1.5rem;
 }
 
-.status[data-tone='error'] {
+.status[data-tone="error"] {
   color: var(--error);
 }
 
-.status[data-tone='success'] {
+.status[data-tone="success"] {
   color: var(--success);
 }
 
