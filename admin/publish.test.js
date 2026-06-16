@@ -461,3 +461,28 @@ test('buildWorkPageHtml sanitizes malicious cover and gallery paths for attribut
   assert.equal(html.includes('onerror='), false)
   assert.equal(html.includes('</script><script>'), false)
 })
+
+test('buildSnippetHtml preserves exact case in image paths for case-sensitive filesystems', () => {
+  const template = `<img src="{imageUrl}" srcset="{imageUrl}" alt="{coverPhotoAlt}"/>`
+  const snippet = buildSnippetHtml(template, {
+    title: 'People of Sicily',
+    subtitle: 'Photo series',
+    slug: 'people-of-sicily',
+    coverPhotoPath: 'peopleOfSicily/landscape/photo.jpg',
+  })
+  
+  assert.match(snippet, /src="peopleOfSicily\/landscape\/photo\.jpg"/)
+})
+
+test('buildSnippetHtml normalizes Windows path separators to forward slashes', () => {
+  const template = `<img src="{imageUrl}" alt="test"/>`
+  const snippet = buildSnippetHtml(template, {
+    title: 'Test',
+    subtitle: 'Test',
+    slug: 'test',
+    coverPhotoPath: 'work\\testfolder\\image.jpg',
+  })
+  
+  assert.match(snippet, /src="work\/testfolder\/image\.jpg"/)
+  assert.doesNotMatch(snippet, /\\/)
+})
