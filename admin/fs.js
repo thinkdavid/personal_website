@@ -53,3 +53,17 @@ export async function writeTextFile(dirHandle, relativePath, contents) {
   await writable.write(contents)
   await writable.close()
 }
+
+export async function readFileFromHandle(dirHandle, relativePath) {
+  const segments = splitPath(relativePath)
+  if (segments.length === 0) {
+    throw new Error('File path is empty.')
+  }
+
+  const fileName = segments.pop()
+  const parent = await walkDirectory(dirHandle, segments, false)
+  const fileHandle = await parent.getFileHandle(fileName)
+  const file = await fileHandle.getFile()
+
+  return file.arrayBuffer()
+}

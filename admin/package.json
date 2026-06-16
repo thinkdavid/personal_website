@@ -1,0 +1,9 @@
+{
+  "name": "thinkdavid-admin",
+  "version": "1.0.0",
+  "description": "Admin tools for publishing photography portfolio",
+  "type": "module",
+  "dependencies": {
+    "@azure/storage-blob": "^12.19.0"
+  }
+}

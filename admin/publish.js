@@ -1,3 +1,6 @@
+import { uploadImageToBlob, createBlobContainerClient, getBlobCDNUrl } from './blob-storage.js'
+import { readFileFromHandle } from './fs.js'
+
 const INDEX_ANCHOR = '<div role="list" class="work-list_list w-dyn-items">'
 const IMAGE_EXTENSIONS = new Set(['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif'])
 
@@ -80,12 +83,69 @@ export async function collectPhotoPaths(rootHandle, workName) {
   }
 }
 
-export async function publishWorkEntry(rootHandle, payload, loadDependencies = loadPublishDependencies) {
+export async function publishWorkEntry(rootHandle, payload, loadDependenciesOrContainerClient = loadPublishDependencies) {
+  // Support both old testing interface (loadDependencies function) and new Blob Storage interface (containerClient)
+  let loadDependencies = loadPublishDependencies
+  let containerClient = null
+  
+  if (typeof loadDependenciesOrContainerClient === 'function') {
+    // Old testing interface: third parameter is loadDependencies function
+    loadDependencies = loadDependenciesOrContainerClient
+  } else if (loadDependenciesOrContainerClient && typeof loadDependenciesOrContainerClient === 'object') {
+    // New interface: third parameter is containerClient object
+    containerClient = loadDependenciesOrContainerClient
+  }
+
   const { readTextFile, writeTextFile, buildSnippetHtml, buildWorkPageHtml } = await loadDependencies()
   const snippetTemplate = await readTextFile(rootHandle, 'workSnippetWithVariables.html')
   const workTemplate = await readTextFile(rootHandle, 'work/work-page-with-variables.html')
-  const snippetHtml = buildSnippetHtml(snippetTemplate, payload)
-  const workPageHtml = buildWorkPageHtml(workTemplate, payload)
+  
+  let updatedPayload = { ...payload }
+
+  // If containerClient provided, upload images to Blob Storage and update paths
+  if (containerClient) {
+    try {
+      const landscapePhotos = await Promise.all(
+        payload.landscapePhotos.map(async (localPath) => {
+          // Validate case-sensitive path
+          if (!localPath.match(/^[a-zA-Z][a-zA-Z]*\/landscape\//)) {
+            throw new Error(`Invalid landscape path format: ${localPath} (must be camelCase/landscape/)`)
+          }
+          
+          const buffer = await readFileFromHandle(rootHandle, localPath)
+          await uploadImageToBlob(localPath, buffer, containerClient)
+          return getBlobCDNUrl(localPath)
+        })
+      )
+      
+      const portraitPhotos = await Promise.all(
+        payload.portraitPhotos.map(async (localPath) => {
+          // Validate case-sensitive path
+          if (!localPath.match(/^[a-zA-Z][a-zA-Z]*\/portrait\//)) {
+            throw new Error(`Invalid portrait path format: ${localPath} (must be camelCase/portrait/)`)
+          }
+          
+          const buffer = await readFileFromHandle(rootHandle, localPath)
+          await uploadImageToBlob(localPath, buffer, containerClient)
+          return getBlobCDNUrl(localPath)
+        })
+      )
+      
+      const coverPhotoPath = getBlobCDNUrl(payload.coverPhotoPath)
+      
+      updatedPayload = {
+        ...payload,
+        coverPhotoPath,
+        landscapePhotos,
+        portraitPhotos
+      }
+    } catch (error) {
+      throw new Error(`Blob upload failed: ${error.message}`)
+    }
+  }
+
+  const snippetHtml = buildSnippetHtml(snippetTemplate, updatedPayload)
+  const workPageHtml = buildWorkPageHtml(workTemplate, updatedPayload)
   const indexHtml = await readTextFile(rootHandle, 'index.html')
   const galleryHtml = await readTextFile(rootHandle, 'gallery.html')
   if (hasSlugEntry(indexHtml, payload.slug) || hasSlugEntry(galleryHtml, payload.slug)) {

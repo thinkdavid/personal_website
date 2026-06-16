@@ -1,6 +1,7 @@
 import { slugify } from './generator.js'
 import { pickProjectRoot } from './fs.js'
 import { collectPhotoPaths, publishWorkEntry } from './publish.js'
+import { createBlobContainerClient } from './blob-storage.js'
 
 const el = {
   form: document.getElementById('photoForm'),
@@ -128,7 +129,21 @@ async function generate() {
   el.generate.disabled = true
 
   try {
-    setStatus('Generating previews and publishing...', 'info')
+    let containerClient = null
+    let uploadMethod = 'repository'
+    
+    // Check if Azure Blob Storage is configured
+    if (typeof process !== 'undefined' && process.env.AZURE_STORAGE_CONNECTION_STRING) {
+      try {
+        setStatus('Uploading images to Azure Blob Storage...', 'info')
+        containerClient = await createBlobContainerClient()
+        uploadMethod = 'Azure Blob Storage + CDN'
+      } catch (error) {
+        console.warn('Blob Storage not available, falling back to repository:', error.message)
+        setStatus('Warning: Blob Storage unavailable, using repository upload', 'warn')
+      }
+    }
+    
     const { landscapePhotos, portraitPhotos } = await collectPhotoPaths(state.rootHandle, data.workName)
     const payload = {
       title: data.title,
@@ -139,13 +154,17 @@ async function generate() {
       landscapePhotos,
       portraitPhotos,
     }
-    const { snippetHtml, workPageHtml } = await publishWorkEntry(state.rootHandle, payload)
+    
+    setStatus('Generating HTML and publishing...', 'info')
+    const { snippetHtml, workPageHtml } = await publishWorkEntry(state.rootHandle, payload, containerClient)
 
     el.snippetPreview.value = snippetHtml
     el.pagePreview.value = workPageHtml
-    setStatus(`Published ${data.slugValue} to index.html and gallery.html using ${data.workName} marker folders.`, 'success')
+    
+    setStatus(`Published "${data.slugValue}" with images uploaded to ${uploadMethod}.`, 'success')
   } catch (error) {
-    setStatus(error.message, 'error')
+    setStatus(`Error: ${error.message}`, 'error')
+    console.error('Publish error:', error)
   } finally {
     state.isPublishing = false
     el.generate.disabled = !state.rootHandle
