@@ -118,7 +118,8 @@ function escapeHtml(value = '') {
 
 export function buildWorkPageHtml(template, { title, subtitle, coverPhotoPath, landscapePhotos, portraitPhotos, caption = '' }) {
   const { path } = ensurePath(coverPhotoPath, 'Cover photo path')
-  const landscapeHtml = landscapePhotos.map(buildLandscapeItem).join('\n')
+  const landscapeGalleryPhotos = landscapePhotos.filter((photoPath) => photoPath !== coverPhotoPath)
+  const landscapeHtml = landscapeGalleryPhotos.map(buildLandscapeItem).join('\n')
   const portraitHtml = portraitPhotos.map(buildPortraitItem).join('\n')
   const escapedTitle = escapeHtml(title)
   const escapedSubtitle = escapeHtml(subtitle)

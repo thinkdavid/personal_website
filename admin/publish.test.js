@@ -347,6 +347,24 @@ test('buildWorkPageHtml prefixes asset paths for work pages', () => {
   assert.match(html, /"url":"\.\.\/iceland\/portrait\/b\.jpg"/)
 })
 
+test('buildWorkPageHtml omits cover photo from landscape gallery items', () => {
+  const html = buildWorkPageHtml(WORK_TEMPLATE_WITH_DESCRIPTION, {
+    title: 'Salkantay Trek, Peru',
+    subtitle: 'Photography, Digital: 2019',
+    coverPhotoPath: 'peru/landscape/DSC_0818.jpg',
+    landscapePhotos: ['peru/landscape/DSC_0818.jpg', 'peru/landscape/DSC_0845.jpg'],
+    portraitPhotos: []
+  })
+
+  assert.match(html, /src="\.\.\/peru\/landscape\/DSC_0818\.jpg"/)
+  assert.equal(html.includes('src="../peru/landscape/DSC_0818.jpg"'), true)
+  assert.equal(html.includes('src="../peru/landscape/DSC_0845.jpg"'), true)
+  assert.equal(
+    html.includes('<img loading="lazy" height="Auto" alt="" src="../peru/landscape/DSC_0818.jpg" sizes="(max-width: 479px) 92vw, 95vw" srcset="../peru/landscape/DSC_0818.jpg" class="work-image">'),
+    false
+  )
+})
+
 test('buildWorkPageHtml leaves caption empty when omitted', () => {
   const html = buildWorkPageHtml(WORK_TEMPLATE_WITH_DESCRIPTION, {
     title: 'Iceland Dawn',
