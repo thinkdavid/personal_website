@@ -11,11 +11,11 @@ echo "Testing CDN delivery..."
 echo "Verifying case-sensitive paths are accessible..."
 echo ""
 
-# Test a few known image URLs with exact case
+# Test a few known image URLs with exact case (using /images/ container prefix)
 TEST_URLS=(
-  "https://$CDN_HOSTNAME/peru/landscape/DSC_0818.jpg"
-  "https://$CDN_HOSTNAME/mexico/landscape/DSC_3485.jpg"
-  "https://$CDN_HOSTNAME/peopleOfSicily/landscape/siciliajul2024-265.jpg"
+  "https://$CDN_HOSTNAME/images/peru/landscape/DSC_0818.jpg"
+  "https://$CDN_HOSTNAME/images/mexico/landscape/gdl-0441.jpg"
+  "https://$CDN_HOSTNAME/images/peopleOfSicily/landscape/siciliajul2024-265.jpg"
 )
 
 FAILURES=0
@@ -32,7 +32,7 @@ done
 
 echo ""
 echo "Checking HTML files for CDN paths..."
-grep_count=$(grep -r "azureedge.net" index.html gallery.html work/ 2>/dev/null | wc -l)
+grep_count=$(grep -rc "blob.core.windows.net/images/" index.html gallery.html work/ 2>/dev/null | awk -F: '{sum+=$NF} END {print sum}')
 echo "Found $grep_count CDN URLs in HTML files"
 
 if [ "$grep_count" -gt 0 ]; then
@@ -45,7 +45,7 @@ fi
 echo ""
 echo "Checking for case mismatches (should be 0)..."
 # Check for any lowercase directory names that shouldn't be there
-mismatches=$(grep -r "peopleofsicily\|perú\|méxico" index.html gallery.html work/ 2>/dev/null | wc -l || echo "0")
+mismatches=$(grep -r "peopleofsicily\|perú\|méxico" index.html gallery.html work/ 2>/dev/null | wc -l | xargs)
 if [ "$mismatches" = "0" ]; then
   echo "✓ No case-sensitivity issues found"
 else
