@@ -2,12 +2,12 @@ name: Test Generator
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
       - 'admin/**'
       - '.github/workflows/test.yml'
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
       - 'admin/**'
       - '.github/workflows/test.yml'
@@ -19,20 +19,20 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         node-version: ['20.x']
-    
+
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-    
-    - name: Run generator tests
-      run: node admin/publish.test.js
-      shell: bash
-    
-    - name: Verify test output format
-      run: |
-        echo "Tests completed on ${{ matrix.os }} with Node ${{ matrix.node-version }}"
-      shell: bash
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Run generator tests
+        run: node admin/publish.test.js
+        shell: bash
+
+      - name: Verify test output format
+        run: |
+          echo "Tests completed on ${{ matrix.os }} with Node ${{ matrix.node-version }}"
+        shell: bash

@@ -3,11 +3,13 @@
 ## Running Tests
 
 **All tests:**
+
 ```bash
 npm test
 ```
 
 **Single test by name:**
+
 ```bash
 npm run test:single "test name pattern"
 # Example:
@@ -15,6 +17,7 @@ npm run test:single "slugify"
 ```
 
 **Direct Node execution:**
+
 ```bash
 node admin/publish.test.js
 ```
@@ -22,6 +25,7 @@ node admin/publish.test.js
 ## Cross-Platform Testing
 
 Tests run automatically on GitHub Actions for:
+
 - **Windows** (windows-latest)
 - **macOS** (macos-latest)
 - **Linux** (ubuntu-latest)
@@ -35,6 +39,7 @@ See `admin/GENERATOR-SPEC.md` for API documentation and cross-platform guarantee
 ## Common Issues
 
 ### Case-Sensitivity on Different Filesystems
+
 - macOS (default): Case-insensitive, but preserves case
 - Linux: Case-sensitive
 - Windows: Case-insensitive, but preserves case

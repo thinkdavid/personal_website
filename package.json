@@ -5,9 +5,17 @@
   "type": "module",
   "scripts": {
     "test": "node admin/publish.test.js",
-    "test:single": "node --test --grep"
+    "test:single": "node --test --grep",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
-  "keywords": ["portfolio", "photography"],
+  "keywords": [
+    "portfolio",
+    "photography"
+  ],
   "author": "David",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "^3.8.4"
+  }
 }

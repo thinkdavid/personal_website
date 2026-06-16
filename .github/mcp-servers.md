@@ -24,7 +24,10 @@ Add these servers to `~/.config/Claude/claude_desktop_config.json`:
     },
     "filesystem": {
       "command": "npx",
-      "args": ["@modelcontextprotocol/server-filesystem", "/Users/thinkdavid/Documents/website/website files"]
+      "args": [
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/thinkdavid/Documents/website/website files"
+      ]
     }
   }
 }
@@ -51,6 +54,7 @@ For Copilot CLI, Cline, or other tools, refer to their documentation for MCP con
 **Purpose:** Test published portfolio pages with automated browser testing.
 
 **Capabilities:**
+
 - Navigate to and interact with web pages
 - Take screenshots of rendered work entries
 - Verify responsive layout across breakpoints (mobile, tablet, desktop)
@@ -58,6 +62,7 @@ For Copilot CLI, Cline, or other tools, refer to their documentation for MCP con
 - Validate HTML structure of generated work pages
 
 **Example use cases:**
+
 ```
 "Test that the People of Sicily work page renders correctly on mobile"
 "Verify all landscape images load at the 1600px breakpoint"
@@ -69,6 +74,7 @@ For Copilot CLI, Cline, or other tools, refer to their documentation for MCP con
 **Purpose:** Automate PR/issue management and repository operations.
 
 **Capabilities:**
+
 - Create and manage pull requests
 - Add labels, milestones, and reviews to issues
 - Query repository history and branch status
@@ -76,6 +82,7 @@ For Copilot CLI, Cline, or other tools, refer to their documentation for MCP con
 - Post comments on PRs during code review
 
 **Example use cases:**
+
 ```
 "Create a PR from dabecher/peopleOfSicily with a summary of the changes"
 "Add a label 'documentation' to this PR"
@@ -89,6 +96,7 @@ For Copilot CLI, Cline, or other tools, refer to their documentation for MCP con
 **Root:** `/Users/thinkdavid/Documents/website/website files`
 
 **Capabilities:**
+
 - List directory contents
 - Read file contents
 - Create new files
@@ -103,12 +111,12 @@ For Copilot CLI, Cline, or other tools, refer to their documentation for MCP con
 
 ### When to Use Each Server
 
-| Task | Server | Example |
-|------|--------|---------|
-| Fix publishing logic | Filesystem + Tests | Edit `admin/publish.js`, run `npm test` |
-| Test rendered output | Playwright | Verify new work entry displays correctly |
-| Manage PRs | GitHub | Create PR, add labels, request review |
-| Complex code review | GitHub + Filesystem | Comment on PR with suggestions, link to relevant code |
+| Task                 | Server              | Example                                               |
+| -------------------- | ------------------- | ----------------------------------------------------- |
+| Fix publishing logic | Filesystem + Tests  | Edit `admin/publish.js`, run `npm test`               |
+| Test rendered output | Playwright          | Verify new work entry displays correctly              |
+| Manage PRs           | GitHub              | Create PR, add labels, request review                 |
+| Complex code review  | GitHub + Filesystem | Comment on PR with suggestions, link to relevant code |
 
 ### Workflow Example
 
@@ -135,7 +143,7 @@ When testing portfolio pages, use these URLs:
 Create `admin/playwright.config.ts` for frontend testing:
 
 ```typescript
-import { defineConfig, devices } from '@playwright/test'
+import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests',
@@ -152,12 +160,13 @@ export default defineConfig({
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
     { name: 'webkit', use: { ...devices['Desktop Safari'] } },
   ],
-})
+});
 ```
 
 ### GitHub Actions Integration
 
 The workflow in `.github/workflows/test.yml` already:
+
 - Runs Node tests on all platforms
 - Can be extended to run Playwright tests
 - Supports automatic PR checks
@@ -167,15 +176,17 @@ The workflow in `.github/workflows/test.yml` already:
 ## Troubleshooting
 
 ### GitHub Token Expired
+
 - Generate a new token at https://github.com/settings/tokens
 - Update `GITHUB_PERSONAL_ACCESS_TOKEN` in `claude_desktop_config.json`
 
 ### Playwright Cannot Find Chrome
+
 - Install Playwright browsers: `npx playwright install`
 - Or specify browser path in config
 
 ### Filesystem MCP Scope Limited
+
 - Paths are scoped to repository root
 - Use relative paths from repository root
 - Cannot access `.git/` or files outside the project
-
