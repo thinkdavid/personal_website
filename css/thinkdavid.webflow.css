@@ -1802,6 +1802,7 @@ figcaption {
 .container-medium-portraits {
   width: 100%;
   max-width: 110rem;
+  margin-top: 3rem;
 }
 
 .containe {
