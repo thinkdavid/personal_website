@@ -1,0 +1,13 @@
+{
+  "name": "thinkdavid-portfolio",
+  "version": "1.0.0",
+  "description": "Photography portfolio with admin publishing tools",
+  "type": "module",
+  "scripts": {
+    "test": "node admin/publish.test.js",
+    "test:single": "node --test --grep"
+  },
+  "keywords": ["portfolio", "photography"],
+  "author": "David",
+  "license": "ISC"
+}
