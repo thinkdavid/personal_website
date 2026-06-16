@@ -3,9 +3,9 @@
   data-wf-site="67482206087384bac04c9bfa" lang="en">
   <head>
     <meta charset="utf-8">
-    <title>thinkdavid</title>
-    <meta content="thinkdavid" property="og:title">
-    <meta content="thinkdavid" property="twitter:title">
+    <title>thinkdavid - Gallery</title>
+    <meta content="thinkdavid - Gallery" property="og:title">
+    <meta content="thinkdavid - Gallery" property="twitter:title">
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <meta content="Webflow" name="generator">
     <link href="css/normalize.css" rel="stylesheet" type="text/css">
@@ -30,26 +30,89 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Gallery page overrides */
+.gallery-page .section_home-header {
+  display: none;
+}
+
+.gallery-page .work-list_list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-auto-flow: dense;
+  gap: 1.5rem;
+  height: auto;
+  position: relative;
+}
+
+.gallery-page .work-list_item {
+  height: 350px;
+  position: relative;
+  top: auto;
+}
+
+.gallery-page .work-list_block {
+  height: 100%;
+}
+
+.gallery-page .work-list_content {
+  height: 100%;
+}
+
+.gallery-page .work-list_image {
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery-page .section_work-list {
+  padding: 2rem 0;
+}
+
+@media (max-width: 991px) {
+  .gallery-page .work-list_list {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+
+  .gallery-page .work-list_item {
+    height: 300px;
+  }
+}
+
+@media (max-width: 479px) {
+  .gallery-page .work-list_list {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .gallery-page .work-list_item {
+    height: 250px;
+  }
+
+  .gallery-page .section_work-list {
+    padding: 1rem 0;
+  }
+}
 </style>
   </head>
-  <body>
+  <body class="gallery-page">
     <div class="page-wrapper">
       <nav class="navbar">
         <div class="padding-global">
           <div class="container-full">
             <div class="navbar_component">
-              <a href="index.html" aria-current="page"
-                class="navbar_logo-wrap w-inline-block w--current"><img
+              <a href="index.html"
+                class="navbar_logo-wrap w-inline-block"><img
                   src="images/name.svg" loading="lazy" alt
                   class="navbar_logo"></a>
               <div class="navbar_links">
                 <a id="w-node-e9556e1b-6d7f-50a1-1cbd-52793870abb8-3870abb1"
-                  href="index.html" aria-current="page"
-                  class="navbar_link w--current">Works,</a>
+                  href="index.html"
+                  class="navbar_link">Works,</a>
                 <a id="w-node-e9556e1b-6d7f-50a1-1cbd-52793870abba-3870abb1"
                   href="about.html" class="navbar_link">About,</a>
                 <a id="w-node-e9556e1b-6d7f-50a1-1cbd-52793870abbd-3870abb1"
-                  href="gallery.html" class="navbar_link">Gallery,</a>
+                  href="gallery.html" aria-current="page"
+                  class="navbar_link w--current">Gallery,</a>
                 <a id="w-node-e9556e1b-6d7f-50a1-1cbd-52793870abbc-3870abb1"
                   href="archive.html" class="navbar_link">Archive</a>
               </div>
@@ -65,65 +128,10 @@
         </div>
       </nav>
       <main class="main-wrapper">
-        <header class="section_home-header">
-          <div class="home-header_image-wrap"><img
-              src="images/colombianye2024-193_1.avif" loading="lazy"
-              sizes="(max-width: 479px) 60vw, (max-width: 991px) 50vw, 800px"
-              alt="Man in green sweater standing at a viewpoint with some trees and a city in the background looking at camera"
-              class="home-header_image"></div>
-        </header>
         <section data-w-id="30cfefdf-e1b9-8770-222d-0a067bf50c73"
           class="section_work-list">
           <div class="work-list_wrapper w-dyn-list">
             <div role="list" class="work-list_list w-dyn-items">
-<!-- Variables
-urlSlug              - i.e. cinque-terre
-coverPhotoAlt        - i.e. Cinque Terre at night
-imageUrl             - i.e. The whole URL except for the .
-imageSuffix          - i.e. Image suffix - , avid, png, etc
-title                - i.e. Cinque Terre
-subtitle             - Photography, Digital: 2019
--->
-<div role="listitem" class="work-list_item w-dyn-item">
-   <a aria-label="link to project" href="work/salkantay-trek-peru.html" class="work-list_block w-inline-block">
-      <div class="work-list_content">
-         <img
-            src="peru/landscape/1.jpg"
-            loading="lazy"
-            alt="Salkantay Trek, Peru"
-            sizes="100vw"
-            srcset="peru/landscape/1.jpg"
-            class="work-list_image"
-         />
-         <div class="work-list_infos">
-            <div class="padding-global">
-               <div class="work-list_infos-content">
-                  <h2>Salkantay Trek, Peru</h2>
-                  <div>Photography, Digital: 2019</div>
-               </div>
-            </div>
-         </div>
-      </div>
-      <div class="work-list_content black-text w-condition-invisible">
-         <img
-            src="peru/landscape/1.jpg"
-            loading="lazy"
-            alt="Salkantay Trek, Peru"
-            sizes="100vw"
-            srcset="peru/landscape/1.jpg"
-            class="work-list_image"
-         />
-         <div class="work-list_infos">
-            <div class="padding-global">
-               <div class="work-list_infos-content">
-                  <h2>Salkantay Trek, Peru</h2>
-                  <div>Photography, Digital: 2019</div>
-               </div>
-            </div>
-         </div>
-      </div>
-   </a>
-</div>
 <!-- Variables
 urlSlug              - i.e. cinque-terre
 coverPhotoAlt        - i.e. Cinque Terre at night
@@ -307,28 +315,6 @@ subtitle             - Photography, Digital: 2019
                   </div>
                 </a>
               </div>
-            </div>
-            <div role="navigation" aria-label="List"
-              class="w-pagination-wrapper">
-              <a href="#" aria-label="Previous Page"
-                class="w-pagination-previous"><svg
-                  class="w-pagination-previous-icon" height="12px" width="12px"
-                  xmlns="http://www.w3.org/2000/svg" viewbox="0 0 12 12"
-                  transform="translate(0, 1)">
-                  <path fill="none" stroke="currentColor" fill-rule="evenodd"
-                    d="M8 10L4 6l4-4"></path>
-                </svg>
-                <div class="w-inline-block">Previous</div>
-              </a>
-              <a href="#" aria-label="Next Page" class="w-pagination-next">
-                <div class="w-inline-block">Next</div><svg
-                  class="w-pagination-next-icon" height="12px" width="12px"
-                  xmlns="http://www.w3.org/2000/svg" viewbox="0 0 12 12"
-                  transform="translate(0, 1)">
-                  <path fill="none" stroke="currentColor" fill-rule="evenodd"
-                    d="M4 2l4 4-4 4"></path>
-                </svg>
-              </a>
             </div>
           </div>
         </section>
