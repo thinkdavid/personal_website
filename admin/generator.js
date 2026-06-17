@@ -40,16 +40,43 @@ function sanitizePathname(pathname, label) {
     .join('/')
 }
 
+function isAbsoluteHttpUrl(value = '') {
+  return /^https?:\/\//i.test(String(value).trim())
+}
+
+function toWorkAssetUrl(path) {
+  return isAbsoluteHttpUrl(path) ? path : `../${path}`
+}
+
 function sanitizeImagePath(filePath, label) {
   const value = String(filePath ?? '').trim()
-  const match = value.match(/^([^?#]*)(\?[^#]*)?(#.*)?$/)
-  const pathname = match?.[1] ?? ''
-  const search = match?.[2] ?? ''
-  const hash = match?.[3] ?? ''
-  const sanitizedPathname = sanitizePathname(pathname, label)
-  const sanitizedSearch = search ? encodeURI(search) : ''
-  const sanitizedHash = hash ? encodeURI(hash) : ''
-  const sanitizedPath = `${sanitizedPathname}${sanitizedSearch}${sanitizedHash}`
+  let sanitizedPathname
+  let sanitizedSearch = ''
+  let sanitizedHash = ''
+  let prefix = ''
+
+  if (isAbsoluteHttpUrl(value)) {
+    let parsed
+    try {
+      parsed = new URL(value)
+    } catch {
+      throw new Error(`${label} must be a valid URL`)
+    }
+    sanitizedPathname = sanitizePathname(parsed.pathname, label)
+    sanitizedSearch = parsed.search ? encodeURI(parsed.search) : ''
+    sanitizedHash = parsed.hash ? encodeURI(parsed.hash) : ''
+    prefix = `${parsed.protocol}//${parsed.host}`
+  } else {
+    const match = value.match(/^([^?#]*)(\?[^#]*)?(#.*)?$/)
+    const pathname = match?.[1] ?? ''
+    const search = match?.[2] ?? ''
+    const hash = match?.[3] ?? ''
+    sanitizedPathname = sanitizePathname(pathname, label)
+    sanitizedSearch = search ? encodeURI(search) : ''
+    sanitizedHash = hash ? encodeURI(hash) : ''
+  }
+
+  const sanitizedPath = `${prefix}${sanitizedPathname}${sanitizedSearch}${sanitizedHash}`
   const parts = splitExtension(sanitizedPathname)
 
   if (!parts) {
@@ -75,15 +102,17 @@ export function buildSrcsetVariants(filePath, widths, finalWidth) {
 export function buildLandscapeItem(filePath) {
   const { path } = ensurePath(filePath, 'Landscape photo path')
   const srcset = buildSrcsetVariants(filePath, LANDSCAPE_WIDTHS, '3936w')
+  const imageUrl = toWorkAssetUrl(path)
 
-  return `<div role="listitem" class="still_item w-dyn-item w-dyn-repeater-item"><div class="work-image-wrap"><img loading="lazy" height="Auto" alt="" src="../${path}" sizes="(max-width: 479px) 92vw, 95vw" srcset="../${srcset}" class="work-image"></div></div>`
+  return `<div role="listitem" class="still_item w-dyn-item w-dyn-repeater-item"><div class="work-image-wrap"><img loading="lazy" height="Auto" alt="" src="${imageUrl}" sizes="(max-width: 479px) 92vw, 95vw" srcset="${imageUrl}" class="work-image"></div></div>`
 }
 
 export function buildPortraitItem(filePath) {
   const { path } = ensurePath(filePath, 'Portrait photo path')
   const srcset = buildSrcsetVariants(filePath, PORTRAIT_WIDTHS, '1005w')
+  const imageUrl = toWorkAssetUrl(path)
 
-  return `<div role="listitem" class="collection-item w-dyn-item w-dyn-repeater-item w-col w-col-6"><a href="#" class="w-inline-block w-lightbox" aria-label="open lightbox" aria-haspopup="dialog"><img src="../${path}" loading="lazy" alt="" sizes="(max-width: 479px) 40vw, (max-width: 767px) 44vw, (max-width: 991px) 46vw, 453px" srcset="../${srcset}"><script type="application/json" class="w-json">{"items":[{"url":"../${path}","type":"image"}],"group":"PeopleOfItaly"}</script></a></div>`
+  return `<div role="listitem" class="collection-item w-dyn-item w-dyn-repeater-item w-col w-col-6"><a href="#" class="w-inline-block w-lightbox" aria-label="open lightbox" aria-haspopup="dialog"><img src="${imageUrl}" loading="lazy" alt="" sizes="(max-width: 479px) 40vw, (max-width: 767px) 44vw, (max-width: 991px) 46vw, 453px" srcset="${imageUrl}"><script type="application/json" class="w-json">{"items":[{"url":"${imageUrl}","type":"image"}],"group":"PeopleOfItaly"}</script></a></div>`
 }
 
 export function buildSnippetHtml(template, { title, subtitle, slug, coverPhotoPath, coverPhotoAlt = title }) {
@@ -128,7 +157,7 @@ export function buildWorkPageHtml(template, { title, subtitle, coverPhotoPath, l
   let rendered = template
     .replaceAll('{title}', escapedTitle)
     .replaceAll('{subtitle}', escapedSubtitle)
-    .replaceAll('{coverPhotoUrl}', `../${path}`)
+    .replaceAll('{coverPhotoUrl}', toWorkAssetUrl(path))
     .replaceAll('{imageSuffixLandscape}', '')
     .replace('alt="Woman in Cartagena Colombia with the Palaqueras."', `alt="${escapedTitle}"`)
     .replaceAll('{nextWorkTitle}', '')
@@ -137,8 +166,6 @@ export function buildWorkPageHtml(template, { title, subtitle, coverPhotoPath, l
     .replaceAll('{description}', escapedCaption)
     .replace('{insertLandscapePhotosHere}', landscapeHtml)
     .replace('{insertPortraitImagesHere}', portraitHtml)
-
-  rendered = rendered.replace(/srcset="[\s\S]*?"/, `srcset="../${path}"`)
 
   return stripSectionByClass(rendered, 'section_work-next')
 }

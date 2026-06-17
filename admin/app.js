@@ -1,7 +1,6 @@
 import { slugify } from './generator.js'
 import { pickProjectRoot } from './fs.js'
 import { collectPhotoPaths, publishWorkEntry } from './publish.js'
-import { createBlobContainerClient } from './blob-storage.js'
 
 const el = {
   form: document.getElementById('photoForm'),
@@ -129,20 +128,9 @@ async function generate() {
   el.generate.disabled = true
 
   try {
-    let containerClient = null
-    let uploadMethod = 'repository'
-    
-    // Check if Azure Blob Storage is configured
-    if (typeof process !== 'undefined' && process.env.AZURE_STORAGE_CONNECTION_STRING) {
-      try {
-        setStatus('Uploading images to Azure Blob Storage...', 'info')
-        containerClient = await createBlobContainerClient()
-        uploadMethod = 'Azure Blob Storage + CDN'
-      } catch (error) {
-        console.warn('Blob Storage not available, falling back to repository:', error.message)
-        setStatus('Warning: Blob Storage unavailable, using repository upload', 'warn')
-      }
-    }
+    const { createBlobContainerClient } = await import('./blob-storage.js')
+    setStatus('Connecting to Azure Blob Storage...', 'info')
+    const containerClient = await createBlobContainerClient(state.rootHandle)
     
     const { landscapePhotos, portraitPhotos } = await collectPhotoPaths(state.rootHandle, data.workName)
     const payload = {
@@ -155,13 +143,13 @@ async function generate() {
       portraitPhotos,
     }
     
-    setStatus('Generating HTML and publishing...', 'info')
+    setStatus('Uploading images to Azure Blob Storage and publishing...', 'info')
     const { snippetHtml, workPageHtml } = await publishWorkEntry(state.rootHandle, payload, containerClient)
 
     el.snippetPreview.value = snippetHtml
     el.pagePreview.value = workPageHtml
     
-    setStatus(`Published "${data.slugValue}" with images uploaded to ${uploadMethod}.`, 'success')
+    setStatus(`Published "${data.slugValue}" with images uploaded to Azure Blob Storage + CDN.`, 'success')
   } catch (error) {
     setStatus(`Error: ${error.message}`, 'error')
     console.error('Publish error:', error)

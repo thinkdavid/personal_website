@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add Photos to Existing Work</title>
+    <link rel="stylesheet" href="./admin.css">
+  </head>
+  <body>
+    <main class="app">
+      <section class="panel">
+        <header class="panel-header">
+          <h1>Add Photos to Existing Work</h1>
+          <p id="rootLabel" class="muted">No folder selected yet</p>
+        </header>
+
+        <div class="toolbar">
+          <button type="button" id="pickRoot">Select project folder</button>
+          <button type="button" id="addPhotos">Add photos</button>
+        </div>
+
+        <form id="addPhotosForm" novalidate>
+          <label class="field">
+            <span>Existing work page</span>
+            <select id="workSelect" name="workSelect" autocomplete="off" disabled>
+              <option value="">Select project folder first</option>
+            </select>
+            <small class="field-error" data-error-for="workSelect"></small>
+          </label>
+
+          <label class="field">
+            <span>Blob folder name (optional)</span>
+            <input id="blobFolder" name="blobFolder" autocomplete="off" placeholder="defaults to slug (e.g. peopleOfSicily)">
+            <p class="muted">Override if your blob storage folder differs from the slug.</p>
+          </label>
+
+          <div class="field">
+            <span>Landscape photos</span>
+            <div class="picker-row">
+              <button type="button" id="pickLandscape">Add landscape photos</button>
+              <button type="button" id="clearLandscape" class="btn-clear" hidden>Clear</button>
+            </div>
+            <ul id="landscapeSummary" class="file-list"></ul>
+            <small class="field-error" data-error-for="landscape"></small>
+          </div>
+
+          <div class="field">
+            <span>Portrait photos</span>
+            <div class="picker-row">
+              <button type="button" id="pickPortrait">Add portrait photos</button>
+              <button type="button" id="clearPortrait" class="btn-clear" hidden>Clear</button>
+            </div>
+            <ul id="portraitSummary" class="file-list"></ul>
+            <small class="field-error" data-error-for="portrait"></small>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2>Updated work page</h2>
+        <textarea id="resultPreview" readonly spellcheck="false"></textarea>
+        <p id="status" class="status" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <script type="module" src="./add-photos.js?v=20260617b"></script>
+  </body>
+</html>

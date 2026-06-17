@@ -5,7 +5,10 @@ import {
   insertSnippetAtAnchor,
   classifyMarkerPath,
   collectPhotoPaths,
-  publishWorkEntry
+  publishWorkEntry,
+  listExistingWorkPages,
+  appendPhotosToExistingWorkPage,
+  appendCdnUrlsToWorkPage,
 } from './publish.js'
 
 test('insertSnippetAtAnchor inserts immediately after work-list anchor', () => {
@@ -175,6 +178,144 @@ test('collectPhotoPaths throws a friendly error when the work folder is missing'
   await assert.rejects(() => collectPhotoPaths(rootHandle, 'peru'), /expected peru\/landscape and peru\/portrait/i)
 })
 
+test('listExistingWorkPages returns sorted work page slugs preserving case', async () => {
+  const rootHandle = createDirHandle({
+    work: createDirectory({
+      'peopleOfSicily.html': createFile(),
+      'guadalajara-mexico.html': createFile(),
+      'work-page-with-variables.html': createFile(),
+      'finalOutput.html': createFile(),
+      'notes.txt': createFile(),
+    }),
+  })
+
+  const pages = await listExistingWorkPages(rootHandle)
+  assert.deepEqual(pages, [
+    { slug: 'guadalajara-mexico', filePath: 'work/guadalajara-mexico.html' },
+    { slug: 'peopleOfSicily', filePath: 'work/peopleOfSicily.html' },
+  ])
+})
+
+test('appendPhotosToExistingWorkPage appends new blob URLs and writes backup', async () => {
+  const writes = []
+  const originalHtml = `
+    <section>
+      <div role="list" class="still_list w-dyn-items">
+        <div class="still_item">existing-landscape</div>
+      </div>
+      <div role="list" class="collection-list w-dyn-items w-row">
+        <div class="collection-item">existing-portrait</div>
+      </div>
+    </section>
+  `
+
+  const loadDeps = async () => ({
+    readTextFile: async (_root, path) => {
+      if (path === 'work/people-of-sicily.html') return originalHtml
+      throw new Error(`Unexpected read: ${path}`)
+    },
+    writeTextFile: async (_root, path, contents) => {
+      writes.push({ path, contents })
+    },
+    readBinaryFile: async () => new Uint8Array([1, 2, 3]).buffer,
+    buildLandscapeItem: (url) => `<div class="still_item" data-url="${url}"></div>`,
+    buildPortraitItem: (url) => `<div class="collection-item" data-url="${url}"></div>`,
+    uploadImageToBlob: async () => {},
+    getBlobCDNUrl: (localPath) => `https://cdn.example.com/${localPath}`,
+  })
+
+  const result = await appendPhotosToExistingWorkPage(
+    {},
+    {
+      slug: 'people-of-sicily',
+      workName: 'peopleOfSicily',
+      landscapePhotos: ['peopleOfSicily/landscape/new-a.jpg'],
+      portraitPhotos: ['peopleOfSicily/portrait/new-b.jpg'],
+    },
+    { loadDependencies: loadDeps, containerClient: {} }
+  )
+
+  assert.equal(result.appendedLandscapeCount, 1)
+  assert.equal(result.appendedPortraitCount, 1)
+  assert.deepEqual(writes.map((entry) => entry.path), [
+    'work/people-of-sicily.html.backup',
+    'work/people-of-sicily.html',
+  ])
+  const updated = writes[1].contents
+  assert.equal(updated.includes('existing-landscape'), true)
+  assert.equal(updated.includes('existing-portrait'), true)
+  assert.equal(updated.includes('https://cdn.example.com/peopleOfSicily/landscape/new-a.jpg'), true)
+  assert.equal(updated.includes('https://cdn.example.com/peopleOfSicily/portrait/new-b.jpg'), true)
+})
+
+test('appendPhotosToExistingWorkPage skips duplicates already in html', async () => {
+  const writes = []
+  const existingUrl = 'https://cdn.example.com/peopleOfSicily/landscape/existing.jpg'
+  const originalHtml = `
+    <section>
+      <div role="list" class="still_list w-dyn-items">
+        <img src="${existingUrl}">
+      </div>
+      <div role="list" class="collection-list w-dyn-items w-row"></div>
+    </section>
+  `
+
+  const loadDeps = async () => ({
+    readTextFile: async () => originalHtml,
+    writeTextFile: async (_root, path, contents) => {
+      writes.push({ path, contents })
+    },
+    readBinaryFile: async () => new Uint8Array([1, 2, 3]).buffer,
+    buildLandscapeItem: (url) => `<div class="still_item" data-url="${url}"></div>`,
+    buildPortraitItem: (url) => `<div class="collection-item" data-url="${url}"></div>`,
+    uploadImageToBlob: async () => {},
+    getBlobCDNUrl: (localPath) => `https://cdn.example.com/${localPath}`,
+  })
+
+  await assert.rejects(
+    () =>
+      appendPhotosToExistingWorkPage(
+        {},
+        {
+          slug: 'people-of-sicily',
+          workName: 'peopleOfSicily',
+          landscapePhotos: ['peopleOfSicily/landscape/existing.jpg'],
+          portraitPhotos: [],
+        },
+        { loadDependencies: loadDeps, containerClient: {} }
+      ),
+    /already exist/i
+  )
+  assert.equal(writes.length, 0)
+})
+
+test('appendPhotosToExistingWorkPage throws explicit error when gallery marker is missing', async () => {
+  const loadDeps = async () => ({
+    readTextFile: async () => '<main>missing lists</main>',
+    writeTextFile: async () => {},
+    readBinaryFile: async () => new Uint8Array([1, 2, 3]).buffer,
+    buildLandscapeItem: (url) => `<div>${url}</div>`,
+    buildPortraitItem: (url) => `<div>${url}</div>`,
+    uploadImageToBlob: async () => {},
+    getBlobCDNUrl: (localPath) => `https://cdn.example.com/${localPath}`,
+  })
+
+  await assert.rejects(
+    () =>
+      appendPhotosToExistingWorkPage(
+        {},
+        {
+          slug: 'people-of-sicily',
+          workName: 'peopleOfSicily',
+          landscapePhotos: ['peopleOfSicily/landscape/new-a.jpg'],
+          portraitPhotos: [],
+        },
+        { loadDependencies: loadDeps, containerClient: {} }
+      ),
+    /landscape gallery marker/i
+  )
+})
+
 test('publishWorkEntry writes backups, work page, and updated index/gallery via injected dependencies', async () => {
   const writes = []
   const payload = { slug: 'iceland-dawn', title: 'Iceland Dawn' }
@@ -208,6 +349,72 @@ test('publishWorkEntry writes backups, work page, and updated index/gallery via 
   assert.match(writtenByPath['work/iceland-dawn.html'], /work-template:iceland-dawn/)
   assert.match(writtenByPath['index.html'], /snippet-template:Iceland Dawn/)
   assert.match(writtenByPath['gallery.html'], /snippet-template:Iceland Dawn/)
+})
+
+test('publishWorkEntry with blob client writes CDN URLs (not local paths) into work page html', async () => {
+  const writes = []
+  const uploadCalls = []
+  const payload = {
+    slug: 'egypt',
+    title: 'Egypt',
+    subtitle: 'Photography',
+    caption: 'Test',
+    coverPhotoPath: 'egypt/landscape/_DAB3066.jpg',
+    landscapePhotos: ['egypt/landscape/_DAB3066.jpg'],
+    portraitPhotos: ['egypt/portrait/_DAB3051.jpg'],
+  }
+
+  const loadDependencies = async () => ({
+    readTextFile: async (_root, path) => {
+      if (path === 'workSnippetWithVariables.html') return 'snippet-template'
+      if (path === 'work/work-page-with-variables.html') return 'work-template'
+      if (path === 'index.html') return '<main><div role="list" class="work-list_list w-dyn-items"></div></main>'
+      if (path === 'gallery.html') return '<main><div role="list" class="work-list_list w-dyn-items"></div></main>'
+      throw new Error(`Unexpected read: ${path}`)
+    },
+    writeTextFile: async (_root, path, contents) => writes.push({ path, contents }),
+    buildSnippetHtml: (_template, data) => `snippet:${data.coverPhotoPath}`,
+    buildWorkPageHtml: (_template, data) => JSON.stringify(data),
+  })
+
+  const loadBlobDependencies = async () => ({
+    readBinaryFile: async () => new Uint8Array([1, 2, 3]).buffer,
+    uploadImageToBlob: async (localPath) => {
+      uploadCalls.push(localPath)
+    },
+    getBlobCDNUrl: (localPath) => `https://cdn.example.com/${localPath}`,
+  })
+
+  const result = await publishWorkEntry(
+    {},
+    payload,
+    { loadDependencies, loadBlobDependencies, containerClient: {} }
+  )
+
+  assert.deepEqual(uploadCalls, [
+    'egypt/landscape/_DAB3066.jpg',
+    'egypt/portrait/_DAB3051.jpg',
+  ])
+  assert.match(result.workPageHtml, /https:\/\/cdn\.example\.com\/egypt\/landscape\/_DAB3066\.jpg/)
+  assert.match(result.workPageHtml, /https:\/\/cdn\.example\.com\/egypt\/portrait\/_DAB3051\.jpg/)
+  assert.doesNotMatch(result.workPageHtml, /"\.\.\/egypt\/landscape\/_DAB3066\.jpg"/)
+  assert.doesNotMatch(result.workPageHtml, /"\.\.\/egypt\/portrait\/_DAB3051\.jpg"/)
+  assert.doesNotMatch(result.workPageHtml, /"egypt\/landscape\/_DAB3066\.jpg"/)
+  assert.doesNotMatch(result.workPageHtml, /"egypt\/portrait\/_DAB3051\.jpg"/)
+  assert.match(writes.find((w) => w.path === 'work/egypt.html').contents, /https:\/\/cdn\.example\.com\//)
+})
+
+test('publishWorkEntry throws when called without blob container client in runtime mode', async () => {
+  const payload = { slug: 'iceland-dawn', title: 'Iceland Dawn' }
+  await assert.rejects(
+    () =>
+      publishWorkEntry({}, payload, {
+        loadDependencies: async () => {
+          throw new Error('loadDependencies should not run when blob client is missing')
+        },
+      }),
+    /container client is required/i
+  )
 })
 
 test('publishWorkEntry throws when index already has the same work slug', async () => {
@@ -347,6 +554,30 @@ test('buildWorkPageHtml prefixes asset paths for work pages', () => {
   assert.match(html, /"url":"\.\.\/iceland\/portrait\/b\.jpg"/)
 })
 
+test('buildWorkPageHtml preserves absolute CDN URLs without ../ prefix', () => {
+  const html = buildWorkPageHtml(WORK_TEMPLATE_WITH_DESCRIPTION, {
+    title: 'Egypt',
+    subtitle: 'Photography',
+    coverPhotoPath: 'https://thinkdavidportfolio91556.blob.core.windows.net/images/egypt/landscape/_DAB3066.jpg',
+    landscapePhotos: ['https://thinkdavidportfolio91556.blob.core.windows.net/images/egypt/landscape/_DAB3066.jpg'],
+    portraitPhotos: ['https://thinkdavidportfolio91556.blob.core.windows.net/images/egypt/portrait/_DAB3051.jpg']
+  })
+
+  assert.match(
+    html,
+    /src="https:\/\/thinkdavidportfolio91556\.blob\.core\.windows\.net\/images\/egypt\/landscape\/_DAB3066\.jpg"/
+  )
+  assert.match(
+    html,
+    /src="https:\/\/thinkdavidportfolio91556\.blob\.core\.windows\.net\/images\/egypt\/portrait\/_DAB3051\.jpg"/
+  )
+  assert.match(
+    html,
+    /"url":"https:\/\/thinkdavidportfolio91556\.blob\.core\.windows\.net\/images\/egypt\/portrait\/_DAB3051\.jpg"/
+  )
+  assert.doesNotMatch(html, /\.\.\/https%3A\/\//)
+})
+
 test('buildWorkPageHtml omits cover photo from landscape gallery items', () => {
   const html = buildWorkPageHtml(WORK_TEMPLATE_WITH_DESCRIPTION, {
     title: 'Salkantay Trek, Peru',
@@ -460,6 +691,93 @@ test('buildWorkPageHtml sanitizes malicious cover and gallery paths for attribut
   assert.equal(html.includes('onclick='), false)
   assert.equal(html.includes('onerror='), false)
   assert.equal(html.includes('</script><script>'), false)
+})
+
+const GALLERY_HTML = `
+  <section>
+    <div role="list" class="still_list w-dyn-items">
+      <div class="still_item">existing-landscape</div>
+    </div>
+    <div role="list" class="collection-list w-dyn-items w-row">
+      <div class="collection-item">existing-portrait</div>
+    </div>
+  </section>
+`
+
+test('appendCdnUrlsToWorkPage appends CDN URLs and writes backup', async () => {
+  const writes = []
+  const loadDeps = async () => ({
+    readTextFile: async (_root, path) => {
+      if (path === 'work/people-of-sicily.html') return GALLERY_HTML
+      throw new Error(`Unexpected read: ${path}`)
+    },
+    writeTextFile: async (_root, path, contents) => writes.push({ path, contents }),
+    buildLandscapeItem: (url) => `<div class="still_item" data-url="${url}"></div>`,
+    buildPortraitItem: (url) => `<div class="collection-item" data-url="${url}"></div>`,
+  })
+
+  const result = await appendCdnUrlsToWorkPage(
+    {},
+    {
+      slug: 'people-of-sicily',
+      landscapeCdnUrls: ['https://cdn.example.com/peopleOfSicily/landscape/new-a.jpg'],
+      portraitCdnUrls: ['https://cdn.example.com/peopleOfSicily/portrait/new-b.jpg'],
+    },
+    loadDeps
+  )
+
+  assert.equal(result.appendedLandscapeCount, 1)
+  assert.equal(result.appendedPortraitCount, 1)
+  assert.deepEqual(writes.map((w) => w.path), [
+    'work/people-of-sicily.html.backup',
+    'work/people-of-sicily.html',
+  ])
+  const updated = writes[1].contents
+  assert.equal(updated.includes('existing-landscape'), true)
+  assert.equal(updated.includes('https://cdn.example.com/peopleOfSicily/landscape/new-a.jpg'), true)
+  assert.equal(updated.includes('https://cdn.example.com/peopleOfSicily/portrait/new-b.jpg'), true)
+})
+
+test('appendCdnUrlsToWorkPage skips URLs already in the page', async () => {
+  const existingUrl = 'https://cdn.example.com/peopleOfSicily/landscape/existing.jpg'
+  const writes = []
+  const loadDeps = async () => ({
+    readTextFile: async () =>
+      `<section><div role="list" class="still_list w-dyn-items"><img src="${existingUrl}"></div><div role="list" class="collection-list w-dyn-items w-row"><div class="new-portrait" data-url="https://cdn.example.com/peopleOfSicily/portrait/new.jpg"></div></div></section>`,
+    writeTextFile: async (_root, path, contents) => writes.push({ path, contents }),
+    buildLandscapeItem: (url) => `<div data-url="${url}"></div>`,
+    buildPortraitItem: (url) => `<div data-url="${url}"></div>`,
+  })
+
+  await assert.rejects(
+    () =>
+      appendCdnUrlsToWorkPage(
+        {},
+        { slug: 'people-of-sicily', landscapeCdnUrls: [existingUrl], portraitCdnUrls: [] },
+        loadDeps
+      ),
+    /already exist/i
+  )
+  assert.equal(writes.length, 0)
+})
+
+test('appendCdnUrlsToWorkPage throws when landscape gallery marker is missing', async () => {
+  const loadDeps = async () => ({
+    readTextFile: async () => '<main>no gallery here</main>',
+    writeTextFile: async () => {},
+    buildLandscapeItem: (url) => `<div>${url}</div>`,
+    buildPortraitItem: (url) => `<div>${url}</div>`,
+  })
+
+  await assert.rejects(
+    () =>
+      appendCdnUrlsToWorkPage(
+        {},
+        { slug: 'people-of-sicily', landscapeCdnUrls: ['https://cdn.example.com/a.jpg'], portraitCdnUrls: [] },
+        loadDeps
+      ),
+    /landscape gallery marker/i
+  )
 })
 
 test('buildSnippetHtml preserves exact case in image paths for case-sensitive filesystems', () => {
