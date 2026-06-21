@@ -81,7 +81,7 @@
       }
 
       .gallery-page .work-list_item {
-        height: 30vh;
+        height: 20vh;
         position: relative;
         top: auto;
       }
@@ -110,7 +110,21 @@
 
       @media (max-width: 479px) {
         .gallery-page .work-list_item {
-          height: 180px;
+          height: 140px;
+        }
+
+        .gallery-page .work-list_content {
+          position: relative;
+        }
+
+        .gallery-page .work-list_infos {
+          position: absolute;
+          bottom: 0;
+          top: auto;
+          order: 0;
+          background-color: rgba(0, 0, 0, 0.55);
+          padding-top: 0.5rem;
+          padding-bottom: 0.5rem;
         }
 
         .gallery-page .section_work-list {
