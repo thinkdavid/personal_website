@@ -76,16 +76,12 @@
       }
 
       .gallery-page .work-list_list {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        grid-auto-flow: dense;
-        gap: 1.5rem;
         height: auto;
         position: relative;
       }
 
       .gallery-page .work-list_item {
-        height: 350px;
+        height: 30vh;
         position: relative;
         top: auto;
       }
@@ -100,31 +96,21 @@
 
       .gallery-page .work-list_image {
         height: 100%;
+        width: 100%;
         object-fit: cover;
+      }
+
+      .gallery-page .work-list_infos-content div {
+        display: none;
       }
 
       .gallery-page .section_work-list {
         padding: 2rem 0;
       }
 
-      @media (max-width: 991px) {
-        .gallery-page .work-list_list {
-          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        }
-
-        .gallery-page .work-list_item {
-          height: 300px;
-        }
-      }
-
       @media (max-width: 479px) {
-        .gallery-page .work-list_list {
-          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-          gap: 1rem;
-        }
-
         .gallery-page .work-list_item {
-          height: 250px;
+          height: 180px;
         }
 
         .gallery-page .section_work-list {
