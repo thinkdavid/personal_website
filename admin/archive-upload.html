@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Upload Archive Photo</title>
+    <link rel="stylesheet" href="./admin.css">
+  </head>
+  <body>
+    <main class="app">
+      <section class="panel">
+        <header class="panel-header">
+          <h1>Upload Archive Photo</h1>
+          <p id="rootLabel" class="muted">No folder selected yet</p>
+        </header>
+
+        <div class="toolbar">
+          <button type="button" id="pickRoot">Select project folder</button>
+          <button type="button" id="pickPhoto">Pick photo</button>
+          <button type="button" id="upload">Upload to archive</button>
+        </div>
+
+        <form id="archiveForm" novalidate>
+          <div class="field">
+            <span>Selected photo</span>
+            <p id="photoSummary" class="muted">No photo selected</p>
+            <small class="field-error" data-error-for="photo"></small>
+          </div>
+
+          <label class="field">
+            <span>Category</span>
+            <select id="category" name="category" autocomplete="off">
+              <option value="">Select category</option>
+              <option value="portrait">Portrait</option>
+              <option value="landscape">Landscape</option>
+              <option value="nature">Nature</option>
+              <option value="street">Street</option>
+              <option value="architecture">Architecture</option>
+              <option value="bw">Black &amp; White</option>
+            </select>
+            <small class="field-error" data-error-for="category"></small>
+          </label>
+
+          <label class="field">
+            <span>Column placement</span>
+            <select id="columnOverride" name="columnOverride" autocomplete="off">
+              <option value="">Auto (round-robin)</option>
+              <option value="1">Column 1</option>
+              <option value="2">Column 2</option>
+              <option value="3">Column 3</option>
+              <option value="4">Column 4</option>
+            </select>
+          </label>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2>Updated archive page</h2>
+        <textarea id="resultPreview" readonly spellcheck="false"></textarea>
+        <p id="status" class="status" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <script type="module" src="./archive-upload.js?v=20260622a"></script>
+  </body>
+</html>

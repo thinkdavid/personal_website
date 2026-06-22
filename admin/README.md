@@ -54,4 +54,12 @@ See `admin/GENERATOR-SPEC.md` for API documentation and cross-platform guarantee
    - Update `index.html` and `gallery.html`
    - Display generated HTML for review
 
+## Archive Upload Workflow
+
+1. Open `/admin/archive-upload.html`
+2. Select project folder
+3. Pick one image file and choose one category (`portrait`, `landscape`, `nature`, `street`, `architecture`, `bw`)
+4. Optional: force target column (1-4) or leave auto round-robin
+5. Upload to Blob (`archive/<filename>`) and update `archive.html`
+
 See `GENERATOR-SPEC.md` for technical details.

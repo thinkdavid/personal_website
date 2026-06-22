@@ -9,6 +9,7 @@ import {
   listExistingWorkPages,
   appendPhotosToExistingWorkPage,
   appendCdnUrlsToWorkPage,
+  appendPhotoToArchive,
 } from './publish.js'
 
 test('insertSnippetAtAnchor inserts immediately after work-list anchor', () => {
@@ -777,6 +778,109 @@ test('appendCdnUrlsToWorkPage throws when landscape gallery marker is missing', 
         loadDeps
       ),
     /landscape gallery marker/i
+  )
+})
+
+const ARCHIVE_HTML = `
+  <section>
+    <div class="archive-list_component mix-container">
+      <div class="w-row" data-archive-columns="true">
+        <div class="column-4 w-col w-col-3">
+          <a class="mix portrait"></a>
+        </div>
+        <div class="column-4 w-col w-col-3"></div>
+        <div class="column-4 w-col w-col-3"></div>
+        <div class="column-4 w-col w-col-3"></div>
+      </div>
+    </div>
+  </section>
+`
+
+test('appendPhotoToArchive inserts into least-populated column by default', async () => {
+  const writes = []
+  const loadDeps = async () => ({
+    readTextFile: async (_root, path) => {
+      if (path === 'archive.html') return ARCHIVE_HTML
+      throw new Error(`Unexpected read: ${path}`)
+    },
+    writeTextFile: async (_root, path, contents) => writes.push({ path, contents }),
+  })
+
+  const result = await appendPhotoToArchive(
+    {},
+    {
+      photoUrl: 'https://cdn.example.com/archive/photo-a.jpg',
+      category: 'street',
+    },
+    loadDeps
+  )
+
+  assert.equal(result.insertedColumn, 2)
+  assert.equal(result.category, 'street')
+  assert.deepEqual(writes.map((entry) => entry.path), ['archive.html.backup', 'archive.html'])
+  assert.equal(writes[1].contents.includes('https://cdn.example.com/archive/photo-a.jpg'), true)
+  assert.equal(writes[1].contents.includes('class="mix street w-inline-block w-lightbox"'), true)
+})
+
+test('appendPhotoToArchive respects column override when provided', async () => {
+  const writes = []
+  const loadDeps = async () => ({
+    readTextFile: async () => ARCHIVE_HTML,
+    writeTextFile: async (_root, path, contents) => writes.push({ path, contents }),
+  })
+
+  const result = await appendPhotoToArchive(
+    {},
+    {
+      photoUrl: 'https://cdn.example.com/archive/photo-b.jpg',
+      category: 'nature',
+      columnOverride: 4,
+    },
+    loadDeps
+  )
+
+  assert.equal(result.insertedColumn, 4)
+  assert.equal(writes[1].contents.includes('https://cdn.example.com/archive/photo-b.jpg'), true)
+})
+
+test('appendPhotoToArchive rejects duplicate photo URLs already in archive html', async () => {
+  const duplicateUrl = 'https://cdn.example.com/archive/photo-a.jpg'
+  const loadDeps = async () => ({
+    readTextFile: async () => `${ARCHIVE_HTML}<img src="${duplicateUrl}">`,
+    writeTextFile: async () => {},
+  })
+
+  await assert.rejects(
+    () =>
+      appendPhotoToArchive(
+        {},
+        {
+          photoUrl: duplicateUrl,
+          category: 'portrait',
+        },
+        loadDeps
+      ),
+    /already exists/i
+  )
+})
+
+test('appendPhotoToArchive throws explicit error when archive columns anchor is missing', async () => {
+  const loadDeps = async () => ({
+    readTextFile: async () => '<main>missing archive columns</main>',
+    writeTextFile: async () => {},
+  })
+
+  await assert.rejects(
+    () =>
+      appendPhotoToArchive(
+        {},
+        {
+          photoUrl: 'https://cdn.example.com/archive/photo-c.jpg',
+          category: 'architecture',
+        },
+        loadDeps
+      ),
+    /archive columns anchor/i
   )
 })
 
