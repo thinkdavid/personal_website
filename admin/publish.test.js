@@ -559,22 +559,22 @@ test('buildWorkPageHtml preserves absolute CDN URLs without ../ prefix', () => {
   const html = buildWorkPageHtml(WORK_TEMPLATE_WITH_DESCRIPTION, {
     title: 'Egypt',
     subtitle: 'Photography',
-    coverPhotoPath: 'https://thinkdavidportfolio91556.blob.core.windows.net/images/egypt/landscape/_DAB3066.jpg',
-    landscapePhotos: ['https://thinkdavidportfolio91556.blob.core.windows.net/images/egypt/landscape/_DAB3066.jpg'],
-    portraitPhotos: ['https://thinkdavidportfolio91556.blob.core.windows.net/images/egypt/portrait/_DAB3051.jpg']
+    coverPhotoPath: 'https://images.thinkdavid.xyz/images/egypt/landscape/_DAB3066.jpg',
+    landscapePhotos: ['https://images.thinkdavid.xyz/images/egypt/landscape/_DAB3066.jpg'],
+    portraitPhotos: ['https://images.thinkdavid.xyz/images/egypt/portrait/_DAB3051.jpg']
   })
 
   assert.match(
     html,
-    /src="https:\/\/thinkdavidportfolio91556\.blob\.core\.windows\.net\/images\/egypt\/landscape\/_DAB3066\.jpg"/
+    /src="https:\/\/images\.thinkdavid\.xyz\/images\/egypt\/landscape\/_DAB3066\.jpg"/
   )
   assert.match(
     html,
-    /src="https:\/\/thinkdavidportfolio91556\.blob\.core\.windows\.net\/images\/egypt\/portrait\/_DAB3051\.jpg"/
+    /src="https:\/\/images\.thinkdavid\.xyz\/images\/egypt\/portrait\/_DAB3051\.jpg"/
   )
   assert.match(
     html,
-    /"url":"https:\/\/thinkdavidportfolio91556\.blob\.core\.windows\.net\/images\/egypt\/portrait\/_DAB3051\.jpg"/
+    /"url":"https:\/\/images\.thinkdavid\.xyz\/images\/egypt\/portrait\/_DAB3051\.jpg"/
   )
   assert.doesNotMatch(html, /\.\.\/https%3A\/\//)
 })
