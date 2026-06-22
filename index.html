@@ -69,6 +69,12 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
+
+      .w-pagination-button-disabled {
+        opacity: 0.35;
+        pointer-events: none;
+        cursor: default;
+      }
     </style>
   </head>
   <body>
@@ -581,5 +587,71 @@ subtitle             - Photography, Digital: 2019
       crossorigin="anonymous"
     ></script>
     <script src="js/webflow.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      document.addEventListener("DOMContentLoaded", function () {
+        var pageSize = 5;
+        var works = Array.from(
+          document.querySelectorAll(".work-list_list .work-list_item"),
+        );
+        var paginationWrapper = document.querySelector(".w-pagination-wrapper");
+        var previousButton = paginationWrapper
+          ? paginationWrapper.querySelector(".w-pagination-previous")
+          : null;
+        var nextButton = paginationWrapper
+          ? paginationWrapper.querySelector(".w-pagination-next")
+          : null;
+
+        if (!paginationWrapper || !previousButton || !nextButton || !works.length) {
+          return;
+        }
+
+        var totalPages = Math.ceil(works.length / pageSize);
+        if (totalPages <= 1) {
+          paginationWrapper.style.display = "none";
+          return;
+        }
+
+        var currentPage = 1;
+
+        function setButtonState(button, disabled) {
+          button.classList.toggle("w-pagination-button-disabled", disabled);
+          button.setAttribute("aria-disabled", String(disabled));
+          button.tabIndex = disabled ? -1 : 0;
+        }
+
+        function renderPage() {
+          var startIndex = (currentPage - 1) * pageSize;
+          var endIndex = startIndex + pageSize;
+
+          works.forEach(function (workItem, index) {
+            workItem.style.display =
+              index >= startIndex && index < endIndex ? "" : "none";
+          });
+
+          setButtonState(previousButton, currentPage === 1);
+          setButtonState(nextButton, currentPage === totalPages);
+        }
+
+        previousButton.addEventListener("click", function (event) {
+          event.preventDefault();
+          if (currentPage === 1) {
+            return;
+          }
+          currentPage -= 1;
+          renderPage();
+        });
+
+        nextButton.addEventListener("click", function (event) {
+          event.preventDefault();
+          if (currentPage === totalPages) {
+            return;
+          }
+          currentPage += 1;
+          renderPage();
+        });
+
+        renderPage();
+      });
+    </script>
   </body>
 </html>
