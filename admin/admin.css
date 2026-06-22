@@ -66,6 +66,16 @@ button {
   cursor: pointer;
 }
 
+.button-link {
+  border-radius: 999px;
+  padding: 0.7rem 1rem;
+  background: var(--accent);
+  color: white;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;

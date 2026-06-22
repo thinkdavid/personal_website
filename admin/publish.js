@@ -5,6 +5,8 @@ const IMAGE_EXTENSIONS = new Set(['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif'])
 const WORK_PAGE_IGNORED_FILES = new Set(['work-page-with-variables.html', 'finalOutput.html'])
 const LANDSCAPE_LIST_ANCHOR = '<div role="list" class="still_list w-dyn-items">'
 const PORTRAIT_LIST_ANCHOR = '<div role="list" class="collection-list w-dyn-items w-row">'
+const ARCHIVE_COLUMNS_ANCHOR = '<div class="w-row" data-archive-columns="true">'
+const ARCHIVE_CATEGORY_VALUES = new Set(['portrait', 'landscape', 'nature', 'street', 'architecture', 'bw'])
 
 function buildMarkerStructureError(workName) {
   return new Error(
@@ -105,7 +107,6 @@ function appendItemsToListHtml(html, listAnchor, itemsHtml, label) {
   if (!itemsHtml.length) {
     return html
   }
-
   const anchorIndex = html.indexOf(listAnchor)
   if (anchorIndex < 0) {
     throw new Error(`Could not find ${label} gallery marker`)
@@ -118,6 +119,137 @@ function appendItemsToListHtml(html, listAnchor, itemsHtml, label) {
 
   const insertion = `\n${itemsHtml.join('\n')}\n`
   return `${html.slice(0, closeIndex)}${insertion}${html.slice(closeIndex)}`
+}
+
+function escapeHtmlAttribute(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+}
+
+function normalizeArchiveCategory(category) {
+  const normalized = String(category ?? '').trim().toLowerCase()
+  if (!ARCHIVE_CATEGORY_VALUES.has(normalized)) {
+    throw new Error(
+      `Invalid archive category "${category}". Use one of: ${Array.from(ARCHIVE_CATEGORY_VALUES).join(', ')}.`
+    )
+  }
+  return normalized
+}
+
+function normalizeArchiveColumnOverride(columnOverride, columnCount) {
+  if (columnOverride === null || columnOverride === undefined || columnOverride === '') {
+    return null
+  }
+
+  const numeric = Number(columnOverride)
+  if (!Number.isInteger(numeric) || numeric < 1 || numeric > columnCount) {
+    throw new Error(`Column override must be an integer between 1 and ${columnCount}.`)
+  }
+
+  return numeric
+}
+
+function buildArchiveLightboxJson(photoUrl) {
+  return JSON.stringify({
+    items: [{ url: photoUrl, type: 'image' }],
+    group: 'archive'
+  }).replace(/<\//g, '<\\/')
+}
+
+function buildArchiveCardHtml(photoUrl, category) {
+  const escapedUrl = escapeHtmlAttribute(photoUrl)
+  const escapedCategory = escapeHtmlAttribute(category)
+  const lightboxJson = buildArchiveLightboxJson(photoUrl)
+  return `<a href="#" class="mix ${escapedCategory} w-inline-block w-lightbox"><img src="${escapedUrl}" loading="lazy" alt="" class="gallery-thumbnail ${escapedCategory}"><script type="application/json" class="w-json">${lightboxJson}</script></a>`
+}
+
+function collectArchiveColumns(html) {
+  const rowIndex = html.indexOf(ARCHIVE_COLUMNS_ANCHOR)
+  if (rowIndex < 0) {
+    throw new Error('Could not find archive columns anchor')
+  }
+
+  const rowCloseIndex = findDivClosingTagIndex(html, rowIndex)
+  if (rowCloseIndex < 0) {
+    throw new Error('Could not find closing tag for archive columns')
+  }
+
+  const tagPattern = /<div\b[^>]*>|<\/div>/g
+  tagPattern.lastIndex = rowIndex
+  const rowOpen = tagPattern.exec(html)
+  if (!rowOpen || !rowOpen[0].startsWith('<div')) {
+    throw new Error('Could not parse archive columns row')
+  }
+
+  const columns = []
+  let depth = 1
+  let match
+  while ((match = tagPattern.exec(html))) {
+    if (match.index >= rowCloseIndex) {
+      break
+    }
+
+    const token = match[0]
+    if (token.startsWith('<div')) {
+      depth += 1
+      if (depth === 2 && /class="[^"]*\bw-col-3\b[^"]*"/.test(token)) {
+        const openIndex = match.index
+        const openEnd = openIndex + token.length
+        const closeIndex = findDivClosingTagIndex(html, openIndex)
+        if (closeIndex < 0) {
+          throw new Error('Could not find closing tag for archive column')
+        }
+        const innerHtml = html.slice(openEnd, closeIndex)
+        const itemCount = (innerHtml.match(/class="[^"]*\bmix\b[^"]*"/g) || []).length
+        columns.push({ openEnd, itemCount })
+      }
+      continue
+    }
+
+    depth -= 1
+    if (depth === 0) {
+      break
+    }
+  }
+
+  if (!columns.length) {
+    throw new Error('Could not find archive columns')
+  }
+
+  return columns
+}
+
+function chooseArchiveColumn(columns, columnOverride) {
+  if (columnOverride) {
+    return columnOverride - 1
+  }
+
+  let bestIndex = 0
+  let bestCount = columns[0].itemCount
+  for (let index = 1; index < columns.length; index += 1) {
+    if (columns[index].itemCount < bestCount) {
+      bestIndex = index
+      bestCount = columns[index].itemCount
+    }
+  }
+  return bestIndex
+}
+
+function insertArchiveCardIntoColumns(archiveHtml, cardHtml, columnOverride = null) {
+  const columns = collectArchiveColumns(archiveHtml)
+  const normalizedOverride = normalizeArchiveColumnOverride(columnOverride, columns.length)
+  const targetIndex = chooseArchiveColumn(columns, normalizedOverride)
+  const targetColumn = columns[targetIndex]
+  const insertion = `\n${cardHtml}\n`
+  const nextHtml =
+    `${archiveHtml.slice(0, targetColumn.openEnd)}` +
+    `${insertion}` +
+    `${archiveHtml.slice(targetColumn.openEnd)}`
+
+  return { archiveHtml: nextHtml, insertedColumn: targetIndex + 1 }
 }
 
 function normalizeAppendPayload(payload = {}) {
@@ -165,6 +297,11 @@ async function loadHtmlUpdateDependencies() {
     import('./generator.js'),
   ])
   return { readTextFile, writeTextFile, buildLandscapeItem, buildPortraitItem }
+}
+
+async function loadArchiveDependencies() {
+  const [{ readTextFile, writeTextFile }] = await Promise.all([import('./fs.js')])
+  return { readTextFile, writeTextFile }
 }
 
 async function uploadPhotosAndResolveUrls(rootHandle, photoPaths, containerClient, readBinaryFile, uploadImageToBlob, getBlobCDNUrl) {
@@ -474,5 +611,34 @@ export async function appendCdnUrlsToWorkPage(rootHandle, payload, loadDependenc
     workPageHtml: nextHtml,
     appendedLandscapeCount: newLandscapeUrls.length,
     appendedPortraitCount: newPortraitUrls.length,
+  }
+}
+
+export async function appendPhotoToArchive(rootHandle, payload, loadDependencies = loadArchiveDependencies) {
+  const photoUrl = String(payload?.photoUrl ?? '').trim()
+  const category = normalizeArchiveCategory(payload?.category)
+  const columnOverride = payload?.columnOverride ?? null
+
+  if (!photoUrl) {
+    throw new Error('Photo URL is required.')
+  }
+
+  const { readTextFile, writeTextFile } = await loadDependencies()
+  const archiveHtml = await readTextFile(rootHandle, 'archive.html')
+
+  if (archiveHtml.includes(photoUrl)) {
+    throw new Error('This photo already exists in archive.html.')
+  }
+
+  const cardHtml = buildArchiveCardHtml(photoUrl, category)
+  const result = insertArchiveCardIntoColumns(archiveHtml, cardHtml, columnOverride)
+
+  await writeTextFile(rootHandle, 'archive.html.backup', archiveHtml)
+  await writeTextFile(rootHandle, 'archive.html', result.archiveHtml)
+
+  return {
+    archiveHtml: result.archiveHtml,
+    insertedColumn: result.insertedColumn,
+    category
   }
 }
