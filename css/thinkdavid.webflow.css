@@ -1113,6 +1113,13 @@ figcaption {
   display: flex;
 }
 
+.section_work-list .work-list_infos-content h2 {
+  display: inline-block;
+  color: var(--white);
+  background-color: rgba(0, 0, 0, 0.15);
+  padding: 0.1em 0.35em;
+}
+
 .section_home-cta {
   z-index: 3;
   background-color: var(--black);
